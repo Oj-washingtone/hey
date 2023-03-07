@@ -11,6 +11,8 @@ import {
 } from "react-native";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../config/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -83,14 +85,37 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
 
+    // username and email to lowercase
+    credentials.fullName = credentials.fullName.toLowerCase();
+    credentials.email = credentials.email.toLowerCase();
+
     try {
-      await createUserWithEmailAndPassword(
+      const addUser = await createUserWithEmailAndPassword(
         auth,
         credentials.email,
         credentials.password
       );
 
-      //.... create user in firestore
+      if (addUser) {
+        // get id of added user
+        const userId = addUser.user.uid;
+
+        // save user details to firestore
+        try {
+          const docRef = await addDoc(collection(db, "users"), {
+            userId: userId,
+            fullName: credentials.fullName,
+            idNumber: credentials.idNumber,
+            phoneNumber: credentials.phoneNumber,
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch {
+          setCredentials({
+            ...credentials,
+            error: "Error creating user",
+          });
+        }
+      }
 
       // navigate to login screen
       navigation.navigate("Login");
@@ -122,7 +147,7 @@ export default function SignUpScreen({ navigation }) {
         cursorColor="gray"
         value={credentials.fullName}
         onChangeText={(text) =>
-          setCredentials({ ...credentials, fullName: text.toLowerCase() })
+          setCredentials({ ...credentials, fullName: text })
         }
         // leftIcon={<Ionicons name="person" size={24} color="black" />}
       />
@@ -142,9 +167,7 @@ export default function SignUpScreen({ navigation }) {
         placeholder="Email address"
         cursorColor="gray"
         value={credentials.email}
-        onChangeText={(text) =>
-          setCredentials({ ...credentials, email: text.toLowerCase() })
-        }
+        onChangeText={(text) => setCredentials({ ...credentials, email: text })}
       />
 
       <TextInput

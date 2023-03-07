@@ -30,6 +30,9 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
+    // email to lowercase
+    credentils.email = credentils.email.toLowerCase();
+
     try {
       await signInWithEmailAndPassword(
         auth,
@@ -66,9 +69,7 @@ export default function LoginScreen({ navigation }) {
         style={styles.inputField}
         placeholder="Phone number"
         cursorColor="gray"
-        onChangeText={(text) =>
-          setCredentials({ ...credentils, email: text.toLowerCase() })
-        }
+        onChangeText={(text) => setCredentials({ ...credentils, email: text })}
       />
       <TextInput
         style={styles.inputField}
