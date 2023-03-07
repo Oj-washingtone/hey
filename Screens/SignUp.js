@@ -12,7 +12,7 @@ import {
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from "../config/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -102,7 +102,8 @@ export default function SignUpScreen({ navigation }) {
 
         // save user details to firestore
         try {
-          const docRef = await addDoc(collection(db, "users"), {
+          const userRef = await doc(db, "users", userId);
+          setDoc(userRef, {
             userId: userId,
             fullName: credentials.fullName,
             idNumber: credentials.idNumber,

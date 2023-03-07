@@ -4,23 +4,51 @@
 
 // import navigation container and navigation stack
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+// icons
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // import screens
 import HomeScreen from "../Screens/HomeScreen";
+import Chats from "../Screens/Chats";
+import UserAccount from "../Screens/ProfileScreen";
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function UserStack() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{}}>
-        <Stack.Screen
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === "Home") {
+              iconName = focused ? "home" : "home";
+            } else if (route.name === "Inbox") {
+              iconName = focused ? "comments" : "comments";
+            } else if (route.name === "Account") {
+              iconName = focused ? "user" : "user";
+            } else if (route.name === "Settings") {
+              iconName = focused ? "cog" : "cog";
+            }
+
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          },
+          // change the color of the tab bar when active
+          tabBarActiveTintColor: "#4fb448",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
-          // options={{ headerShown: false }}
+          options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+        <Tab.Screen name="Inbox" component={Chats} />
+        <Tab.Screen name="Account" component={UserAccount} />
+        {/* <Tab.Screen name="Settings" component={Chats} /> */}
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
