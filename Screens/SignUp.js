@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,9 +9,24 @@ import {
 } from "react-native";
 
 export default function SignUpScreen({ navigation }) {
+  const [fullName, setFullName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const gotoLogin = () => {
     navigation.navigate("Login");
   };
+
+  // create user
+  function CreateUser() {
+    // ... do authentication stuff here
+    // ... create user in firestore
+    console.log("Creating user");
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -23,23 +39,39 @@ export default function SignUpScreen({ navigation }) {
         style={styles.inputField}
         placeholder="Full name"
         cursorColor="gray"
+        value={fullName}
+        onChangeText={(fullName) => setFullName(fullName)}
       />
       <TextInput
         style={styles.inputField}
         placeholder="ID number or passport"
         cursorColor="gray"
+        value={idNumber}
+        onChangeText={(idNumber) => setIdNumber(idNumber)}
+      />
+
+      <TextInput
+        style={styles.inputField}
+        placeholder="Email address"
+        cursorColor="gray"
+        value={email}
+        onChangeText={(email) => setEmail(email)}
       />
 
       <TextInput
         style={styles.inputField}
         placeholder="Phone number"
         cursorColor="gray"
+        value={phoneNumber}
+        onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
       />
       <TextInput
         style={styles.inputField}
         placeholder="Password"
         secureTextEntry
         cursorColor="gray"
+        value={password}
+        onChangeText={(password) => setPassword(password)}
       />
 
       <TextInput
@@ -47,6 +79,8 @@ export default function SignUpScreen({ navigation }) {
         placeholder="Confirm password"
         secureTextEntry
         cursorColor="gray"
+        value={confirmPassword}
+        onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
       />
 
       <View style={styles.termsCaution}>
@@ -59,7 +93,11 @@ export default function SignUpScreen({ navigation }) {
       </View>
 
       {/* Sign up Btn */}
-      <TouchableOpacity style={styles.loginBtn} activeOpacity={0.5}>
+      <TouchableOpacity
+        style={styles.loginBtn}
+        activeOpacity={0.5}
+        onPress={CreateUser}
+      >
         <Text style={styles.signupBtnText}>Sign up</Text>
       </TouchableOpacity>
       <View style={styles.promptLogin}>
