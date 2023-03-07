@@ -108,7 +108,6 @@ export default function SignUpScreen({ navigation }) {
             idNumber: credentials.idNumber,
             phoneNumber: credentials.phoneNumber,
           });
-          console.log("Document written with ID: ", docRef.id);
         } catch {
           setCredentials({
             ...credentials,

@@ -45,8 +45,6 @@ export default function LoginScreen({ navigation }) {
         error: "Invalid credentials, please check and try again",
       });
     }
-
-    console.log(credentils);
   };
 
   const gotoSignUp = () => {
