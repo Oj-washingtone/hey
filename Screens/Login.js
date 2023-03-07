@@ -6,8 +6,46 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useState } from "react";
+
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
 
 export default function LoginScreen({ navigation }) {
+  const [credentils, setCredentials] = useState({
+    email: "",
+    password: "",
+    error: "",
+  });
+
+  const login = async () => {
+    // check for empty input fields
+    if (credentils.email === "" || credentils.password === "") {
+      setCredentials({
+        ...credentils,
+        error: "Please fill in all fields then continue",
+      });
+
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        credentils.email,
+        credentils.password
+      );
+    } catch {
+      setCredentials({
+        ...credentils,
+        error: "Invalid credentials, please check and try again",
+      });
+    }
+
+    console.log(credentils);
+  };
+
   const gotoSignUp = () => {
     navigation.navigate("Sign up");
   };
@@ -19,23 +57,38 @@ export default function LoginScreen({ navigation }) {
         <Text style={[styles.logoText, styles.logoText2]}>Smart</Text>
       </View>
 
+      {!!credentils.error && (
+        <View style={styles.error}>
+          <Text style={styles.errorMessage}>{credentils.error}</Text>
+        </View>
+      )}
       <TextInput
         style={styles.inputField}
         placeholder="Phone number"
         cursorColor="gray"
+        onChangeText={(text) =>
+          setCredentials({ ...credentils, email: text.toLowerCase() })
+        }
       />
       <TextInput
         style={styles.inputField}
         placeholder="Password"
         secureTextEntry
         cursorColor="gray"
+        onChangeText={(text) =>
+          setCredentials({ ...credentils, password: text })
+        }
       />
       <TouchableOpacity>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </TouchableOpacity>
 
       {/* Login Btn */}
-      <TouchableOpacity style={styles.loginBtn} activeOpacity={0.5}>
+      <TouchableOpacity
+        style={styles.loginBtn}
+        activeOpacity={0.5}
+        onPress={login}
+      >
         <Text style={styles.loginBtnText}>Login</Text>
       </TouchableOpacity>
       <View style={styles.promptSignup}>
@@ -119,5 +172,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#4fb448",
     fontSize: 15,
+  },
+  error: {
+    backgroundColor: "#f8d7da",
+    borderColor: "#f5c6cb",
+    borderWidth: 1,
+    padding: 5,
+    paddingHorizontal: 20,
+    width: "80%",
+    borderRadius: 20,
+    marginBottom: 10,
+  },
+  errorMessage: {
+    color: "#721c24",
   },
 });
