@@ -25,27 +25,6 @@ export default function HomeScreen() {
     phoneNumber: "",
   });
 
-  let data;
-
-  const getUserDetails = async () => {
-    await getDoc(doc(db, "users", user?.uid))
-      .then((doc) => {
-        if (doc.exists) {
-          data = doc.data();
-          console.log("Document data:", doc.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
-      });
-  };
-  getUserDetails();
-
-  console.log(data);
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />

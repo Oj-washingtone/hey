@@ -5,7 +5,7 @@ import AppNavigator from "./navigation/index";
 
 export default function App() {
   // change android navigation color
-  NavigationBar.setBackgroundColorAsync("white");
+  NavigationBar.setBackgroundColorAsync("#fff");
   // change android navigation buttons color
   NavigationBar.setButtonStyleAsync("dark");
 
