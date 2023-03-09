@@ -1,4 +1,9 @@
+// react native gesture handler
+// import 
+
 import { StyleSheet, View, Text } from "react-native";
+
+// import 
 
 export default function MessagingUI({ navigation, route }) {
   const chamaDetails = route.params;
