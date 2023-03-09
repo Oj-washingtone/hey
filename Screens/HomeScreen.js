@@ -1,5 +1,6 @@
+// import "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +10,12 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+
+// bottom sheet library
+// import {
+//   BottomSheetModal,
+//   BottomSheetModalProvider,
+// } from "@gorhom/bottom-sheet";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, signOut } from "firebase/auth";
@@ -87,6 +94,15 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("Messaging UI", chamaDetails);
   };
 
+  // const bottomSheetModalRef = useRef(null);
+  // // amount of screen that we want bottom sheet to contain
+  // const snapPoint = ["48%"];
+
+  // const openBottonSheet = () => {
+  //   bottomSheetModalRef.current?.present();
+  //   console.log("Opening bottom sheet");
+  // };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -116,16 +132,25 @@ export default function HomeScreen({ navigation }) {
 
       {/*2 Wallet action buttons */}
       <View style={styles.walletActions}>
-        <TouchableOpacity style={styles.walletActionButton}>
+        <TouchableOpacity
+          style={styles.walletActionButton}
+          onPress={() => navigation.navigate("Deposit")}
+        >
           <Ioicons name="add-circle" size={24} color="#bd0832" />
           <Text style={styles.walletActionButtonText}>Deposit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.walletActionButton}>
+        <TouchableOpacity
+          style={styles.walletActionButton}
+          onPress={() => navigation.navigate("Withdraw")}
+        >
           <Ioicons name="arrow-down-circle" size={24} color="#bd0832" />
           <Text style={styles.walletActionButtonText}>Witdraw</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.walletActionButton}>
+        <TouchableOpacity
+          style={styles.walletActionButton}
+          // onPress={openBottonSheet}
+        >
           <Ioicons name="alarm" size={24} color="#bd0832" />
           <Text style={styles.walletActionButtonText}>Schedule</Text>
         </TouchableOpacity>
@@ -352,3 +377,76 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
 });
+
+/**
+ * Data mining class notes
+ * Slicing and dicing, and pivoting data -  rotate the data and get what you want from it
+ *
+ * Designing the data warehouse
+ * View in designing the data warehouse (Functional storage in data warehouse)
+ *
+ * Data warehouse process
+ * Top down - overal designing and planning first then you move to the details
+ * Bottom up starts with experiments and prototypes and then you move to the details
+ * The above two can be sumarised into waterfall
+ * ETLR - Extract, Transform, Load, Report
+ * Olap Engine - Online Analytical Processing engine - used to query the data warehouse
+ *
+ * Several data mats put together gives you a data warehouse
+ * Data mart - a subset of the data warehouse - you chaeck if they are independent of each other or depends on each other
+ *
+ * Data warehouse is a collection of data marts
+ * Data mart is a collection of data mats
+ * Data mat is a collection of data cubes
+ * Data cube is a collection of data cells
+ * Data cell is a collection of data points
+ * Data point is a collection of data
+ * Data is a collection of facts
+ * Facts are the data
+ *
+ * Recommended approach in modeling data warehouse
+ * 1. Start with the business process
+ * 2. Identify the data sources
+ * 3. Identify the data marts
+ * 4. Identify the data cubes
+ * 5. Identify the data cells
+ * 6. Identify the data points
+ * 7. Identify the data
+ * 8. Identify the facts
+ *
+ *
+ * Enterprise Data Warehouse /  multi tire data warehouse - 3 tier data warehouse
+ * 1. Data warehouse
+ * 2. Data mart
+ * 3. Data mat
+ * 4. Data cube
+ * 5. Data cell
+ * 6. Data point
+ * 7. Data
+ * 8. Facts
+ *
+ * OLAP SERVER ARCHITECTURE
+ * Relational Olap Server - ROLAP
+ * Multidimensional Olap Server - MOLAP
+ * Hybrid Olap Server - HOLAP
+ *
+ * Apex cuboid, we do aggregation on the data - surmising the data at that level
+ *
+ *
+ * Metadata repository - stores the metadata - data that describes the data
+ * There are the following kinds
+ * 1. Data dictionary - stores the metadata about the data warehouse
+ * 2. Data catalog - stores the metadata about the data warehouse
+ * 3. Data warehouse schema - stores the metadata about the data warehouse
+ * 4. Data warehouse dictionary - stores the metadata about the data warehouse
+ * 5. Data warehouse catalog - stores the metadata about the data warehouse
+ * 6. Data warehouse metadata - stores the metadata about the data warehouse
+ * 7. Data warehouse metadata repository - stores the metadata about the data warehouse
+ *
+ * Moving from OLAP to OLAM
+ * OLAM - Online Analytical Mining
+ *
+ *  one does analysis and the other does mining
+ *
+ *
+ */
