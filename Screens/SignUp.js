@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -17,6 +18,8 @@ import { doc, setDoc } from "firebase/firestore";
 const auth = getAuth();
 
 export default function SignUpScreen({ navigation }) {
+  const [loading, setLoading] = useState(false);
+
   const [credentials, setCredentials] = useState({
     fullName: "",
     idNumber: "",
@@ -28,6 +31,7 @@ export default function SignUpScreen({ navigation }) {
   });
 
   const CreateUser = async () => {
+    // setLoading(true);
     // check for empty values
     if (
       credentials.fullName === "" ||
@@ -90,6 +94,7 @@ export default function SignUpScreen({ navigation }) {
     credentials.email = credentials.email.toLowerCase();
 
     try {
+      setLoading(true);
       const addUser = await createUserWithEmailAndPassword(
         auth,
         credentials.email,
@@ -213,11 +218,14 @@ export default function SignUpScreen({ navigation }) {
 
       {/* Sign up Btn */}
       <TouchableOpacity
-        style={styles.loginBtn}
+        style={styles.registerBtn}
         activeOpacity={0.5}
         onPress={CreateUser}
       >
-        <Text style={styles.signupBtnText}>Sign up</Text>
+        {loading && <ActivityIndicator size="small" color="#fff" />}
+        <Text style={styles.signupBtnText}>
+          {loading ? "Creating account..." : "Sign up"}
+        </Text>
       </TouchableOpacity>
       <View style={styles.promptLogin}>
         <Text style={styles.promptLoginText}>Already have an account?</Text>
@@ -267,7 +275,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 
-  loginBtn: {
+  registerBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
     width: "80%",
     borderRadius: 20,
     backgroundColor: "#4fb448",
@@ -279,6 +290,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
+    fontSize: 16,
   },
 
   promptLogin: {

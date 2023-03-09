@@ -3,52 +3,34 @@
  */
 
 // import navigation container and navigation stack
+
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-// icons
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MainNavigation from "./MainNavigation";
+import MessagingUI from "../Screens/MessagingUI";
 
-// import screens
-import HomeScreen from "../Screens/HomeScreen";
-import Chats from "../Screens/Chats";
-import UserAccount from "../Screens/ProfileScreen";
-
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function UserStack() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === "Home") {
-              iconName = focused ? "home" : "home";
-            } else if (route.name === "Inbox") {
-              iconName = focused ? "comments" : "comments";
-            } else if (route.name === "Account") {
-              iconName = focused ? "user" : "user";
-            } else if (route.name === "Settings") {
-              iconName = focused ? "cog" : "cog";
-            }
-
-            return <FontAwesome name={iconName} size={size} color={color} />;
-          },
-          // change the color of the tab bar when active
-          tabBarActiveTintColor: "#4fb448",
-          tabBarInactiveTintColor: "gray",
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home Stack"
+          component={MainNavigation}
+          options={{
+            headerShown: false,
+          }}
         />
-        <Tab.Screen name="Inbox" component={Chats} />
-        <Tab.Screen name="Account" component={UserAccount} />
-        {/* <Tab.Screen name="Settings" component={Chats} /> */}
-      </Tab.Navigator>
+        <Stack.Screen
+          name="Messaging UI"
+          component={MessagingUI}
+          // options={{
+          //   tabBarBadge: 3,
+          // }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

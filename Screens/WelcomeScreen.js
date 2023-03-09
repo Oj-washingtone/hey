@@ -8,15 +8,27 @@ export default function WelcomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Welcome Screen</Text>
-      <TouchableOpacity
-        style={styles.loginBtn}
-        activeOpacity={0.5}
-        onPress={gotoLoginScreen}
-      >
-        <Text style={styles.BtnText}>Login</Text>
-      </TouchableOpacity>
       <StatusBar style="auto" />
+      <View style={styles.onboarding}>
+        <Text>Welcome Screen</Text>
+      </View>
+      <View style={styles.actions}>
+        <TouchableOpacity
+          style={[styles.btn]}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.btn, styles.signupBtn]}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate("Sign up")}
+        >
+          <Text style={styles.signupBtnText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -29,15 +41,36 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  loginBtn: {
-    width: "80%",
-    padding: 10,
-    backgroundColor: "#000",
-    borderRadius: 20,
-    margin: 60,
+  onboarding: {
+    height: "80%",
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
-  BtnText: {
+
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+    marginTop: 20,
+  },
+
+  btn: {
+    width: "25%",
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 7,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+
+  signupBtn: {
+    backgroundColor: "#4fb448",
+    borderColor: "#4fb448",
+  },
+
+  signupBtnText: {
     color: "white",
-    textAlign: "center",
   },
 });

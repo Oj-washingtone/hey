@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 
@@ -13,6 +14,8 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 const auth = getAuth();
 
 export default function LoginScreen({ navigation }) {
+  const [loading, setLoading] = useState(false);
+
   const [credentils, setCredentials] = useState({
     email: "",
     password: "",
@@ -26,6 +29,7 @@ export default function LoginScreen({ navigation }) {
         ...credentils,
         error: "Please fill in all fields then continue",
       });
+      // stop loading
 
       return;
     }
@@ -34,6 +38,7 @@ export default function LoginScreen({ navigation }) {
     credentils.email = credentils.email.toLowerCase();
 
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(
         auth,
         credentils.email,
@@ -44,6 +49,8 @@ export default function LoginScreen({ navigation }) {
         ...credentils,
         error: "Invalid credentials, please check and try again",
       });
+
+      setLoading(false);
     }
   };
 
@@ -88,7 +95,10 @@ export default function LoginScreen({ navigation }) {
         activeOpacity={0.5}
         onPress={login}
       >
-        <Text style={styles.loginBtnText}>Login</Text>
+        {loading && <ActivityIndicator size="small" color="#fff" />}
+        <Text style={styles.loginBtnText}>
+          {loading ? "Please wait ..." : "Login"}
+        </Text>
       </TouchableOpacity>
       <View style={styles.promptSignup}>
         <Text style={styles.promptSignupText}>Don't have an account?</Text>
@@ -134,6 +144,9 @@ const styles = StyleSheet.create({
   },
 
   loginBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
     width: "80%",
     borderRadius: 20,
     backgroundColor: "#4fb448",
@@ -143,6 +156,7 @@ const styles = StyleSheet.create({
   },
   loginBtnText: {
     color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
   },
