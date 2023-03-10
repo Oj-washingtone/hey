@@ -25,7 +25,7 @@ export default function DepositToWallet() {
       {/* <Text style={styles.text}>DepositToWallet</Text> */}
       <View style={styles.depositAmountSection}>
         <Text style={styles.quiz}>
-          How much would you widh to deposit to your wallet ?
+          How much would you wish to deposit to your wallet ?
         </Text>
         <TextInput
           style={styles.input}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderRightWidth: 0,
     borderLeftWidth: 0,
-    borderColor: "#bd0832",
+    borderColor: "#4fb448",
     width: "80%",
     padding: 10,
     textAlign: "center",
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
 
   depositBtn: {
-    backgroundColor: "#bd0832",
+    backgroundColor: "#4fb448",
     width: "80%",
     padding: 10,
     alignItems: "center",

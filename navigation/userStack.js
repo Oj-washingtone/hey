@@ -11,6 +11,8 @@ import MainNavigation from "./MainNavigation";
 import MessagingUI from "../Screens/MessagingUI";
 import DepositToWallet from "../Screens/DepositToWallet";
 import WithdrawFromWallet from "../Screens/WithdrawFromWallet";
+import JoinChamaScreen from "../Screens/JoinChama";
+import StartChamaScreen from "../Screens/StartChama";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +36,8 @@ export default function UserStack() {
         />
         <Stack.Screen name="Withdraw" component={WithdrawFromWallet} />
         <Stack.Screen name="Deposit" component={DepositToWallet} />
+        <Stack.Screen name="Join Chama" component={JoinChamaScreen} />
+        <Stack.Screen name="Start Chama" component={StartChamaScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

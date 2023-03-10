@@ -113,6 +113,9 @@ export default function SignUpScreen({ navigation }) {
             fullName: credentials.fullName,
             idNumber: credentials.idNumber,
             phoneNumber: credentials.phoneNumber,
+            email: credentials.email,
+            hasChama: false,
+            profilePicture: "",
           });
         } catch {
           setCredentials({

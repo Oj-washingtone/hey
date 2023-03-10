@@ -37,17 +37,10 @@ export default function MainNavigation() {
         name="Home"
         component={HomeScreen}
         options={{
-          // Add logo to the tab bar
-          title: "ChamaSmart",
+          title: "Chama Smart",
         }}
       />
-      <Tab.Screen
-        name="Inbox"
-        component={Chats}
-        // options={{
-        //   tabBarBadge: 3,
-        // }}
-      />
+      <Tab.Screen name="Inbox" component={Chats} />
       <Tab.Screen name="Account" component={UserAccount} />
     </Tab.Navigator>
   );

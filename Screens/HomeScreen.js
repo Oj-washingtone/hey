@@ -1,4 +1,13 @@
-// import "react-native-reanimated";
+import { db } from "../config/firebase";
+import {
+  collection,
+  where,
+  query,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+
 import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
 import {
@@ -11,24 +20,21 @@ import {
   Dimensions,
 } from "react-native";
 
-// bottom sheet library
-// import {
-//   BottomSheetModal,
-//   BottomSheetModalProvider,
-// } from "@gorhom/bottom-sheet";
-
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, signOut } from "firebase/auth";
 
 import Ioicons from "react-native-vector-icons/Ionicons";
 
-// screens
+// components
+import FloatingActionButton from "./myComponents/FloatingActionButton";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function HomeScreen({ navigation }) {
   const user = useAuthentication();
   const auth = getAuth();
+
+  const userId = user?.uid;
 
   const [userDetails, setUserDetails] = useState({
     fullName: "",
@@ -90,18 +96,38 @@ export default function HomeScreen({ navigation }) {
     },
   ]);
 
+  // get details of this user from firestore
+
+  const getUserDetails = async (userId) => {
+    try {
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setUserDetails(docSnap.data());
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (userId) {
+    getUserDetails(userId);
+  }
+
   const openChama = (chamaDetails) => {
     navigation.navigate("Messaging UI", chamaDetails);
   };
 
-  // const bottomSheetModalRef = useRef(null);
-  // // amount of screen that we want bottom sheet to contain
-  // const snapPoint = ["48%"];
+  const handleJoinChama = () => {
+    navigation.navigate("Join Chama");
+  };
 
-  // const openBottonSheet = () => {
-  //   bottomSheetModalRef.current?.present();
-  //   console.log("Opening bottom sheet");
-  // };
+  const handleStartChama = () => {
+    navigation.navigate("Start Chama");
+  };
 
   return (
     <View style={styles.container}>
@@ -110,7 +136,8 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.top}>
         <View>
           <Text style={styles.welcome}>Welcome back</Text>
-          <Text style={styles.nameUser}>Washingtone Jalang'O</Text>
+
+          <Text style={styles.nameUser}>{userDetails.fullName}</Text>
         </View>
         <View style={styles.profileImageSection}>
           <Image
@@ -136,14 +163,14 @@ export default function HomeScreen({ navigation }) {
           style={styles.walletActionButton}
           onPress={() => navigation.navigate("Deposit")}
         >
-          <Ioicons name="add-circle" size={24} color="#bd0832" />
+          <Ioicons name="add-circle" size={24} color="#4fb448" />
           <Text style={styles.walletActionButtonText}>Deposit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.walletActionButton}
           onPress={() => navigation.navigate("Withdraw")}
         >
-          <Ioicons name="arrow-down-circle" size={24} color="#bd0832" />
+          <Ioicons name="arrow-down-circle" size={24} color="#4fb448" />
           <Text style={styles.walletActionButtonText}>Witdraw</Text>
         </TouchableOpacity>
 
@@ -151,51 +178,66 @@ export default function HomeScreen({ navigation }) {
           style={styles.walletActionButton}
           // onPress={openBottonSheet}
         >
-          <Ioicons name="alarm" size={24} color="#bd0832" />
+          <Ioicons name="alarm" size={24} color="#4fb448" />
           <Text style={styles.walletActionButtonText}>Schedule</Text>
         </TouchableOpacity>
       </View>
       {/* 1 */}
       <View style={styles.chamaSection}>
         <Text style={styles.title}>My chamas</Text>
-        <FlatList
-          keyExtractor={(item) => item.id}
-          data={chamaRooms}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.chama}
-              onPress={() => openChama(item)}
-            >
-              <View style={styles.chamaImageSection}>
-                <Image style={styles.chamaDP} source={item.chamaDP} />
-              </View>
 
-              <View style={styles.MoreOnChama}>
-                <View style={styles.chamaDetails}>
-                  <Text style={styles.chamaName}>{item.chamaName}</Text>
-                  <Text style={styles.messageAt}>{item.messageAt}</Text>
+        {/* Only show chama list if has chama is true */}
+        {userDetails.hasChama == true ? (
+          <FlatList
+            keyExtractor={(item) => item.id}
+            data={chamaRooms}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.chama}
+                onPress={() => openChama(item)}
+              >
+                <View style={styles.chamaImageSection}>
+                  <Image style={styles.chamaDP} source={item.chamaDP} />
                 </View>
-                <View style={styles.chamaRecentMessages}>
-                  <Text>Recent message</Text>
 
-                  {item.totalUnreadMessages > 0 && (
-                    <Text style={styles.messageCounter}>
-                      {item.totalUnreadMessages}
-                    </Text>
-                  )}
+                <View style={styles.MoreOnChama}>
+                  <View style={styles.chamaDetails}>
+                    <Text style={styles.chamaName}>{item.chamaName}</Text>
+                    <Text style={styles.messageAt}>{item.messageAt}</Text>
+                  </View>
+                  <View style={styles.chamaRecentMessages}>
+                    <Text>Recent message</Text>
+
+                    {item.totalUnreadMessages > 0 && (
+                      <Text style={styles.messageCounter}>
+                        {item.totalUnreadMessages}
+                      </Text>
+                    )}
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          )}
-          showsVerticalScrollIndicator={false}
-        />
+              </TouchableOpacity>
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <View style={styles.noChama}>
+            <Text style={styles.noChamaText}>
+              You are not a member of any chama yet, press the add button to
+              join one or create one
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* <Text>Welcome {user?.email}</Text> */}
 
-      <TouchableOpacity style={styles.floatingActionButton}>
+      <FloatingActionButton
+        onJoinChamaPress={handleJoinChama}
+        onCreateChamaPress={handleStartChama}
+      />
+      {/* <TouchableOpacity style={styles.floatingActionButton} activeOpacity={0.5}>
         <Ioicons name="add" size={24} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
@@ -375,6 +417,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     borderRadius: 10,
     paddingHorizontal: 5,
+  },
+
+  noChama: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChamaText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "gray",
+    width: "70%",
+    textAlign: "center",
   },
 });
 
