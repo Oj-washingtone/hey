@@ -97,26 +97,26 @@ export default function HomeScreen({ navigation }) {
   ]);
 
   // get details of this user from firestore
-  useEffect(() => {
-    const getUserDetails = async (userId) => {
-      try {
-        const docRef = doc(db, "users", userId);
-        const docSnap = await getDoc(docRef);
+  // useEffect(() => {
+  const getUserDetails = async (userId) => {
+    try {
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.log(error);
+      if (docSnap.exists()) {
+        setUserDetails(docSnap.data());
+      } else {
+        console.log("No such document!");
       }
-    };
-
-    if (userId) {
-      getUserDetails(userId);
+    } catch (error) {
+      console.log(error);
     }
-  }, [userId]);
+  };
+
+  if (userId) {
+    getUserDetails(userId);
+  }
+  // }, [userId]);
 
   const openChama = (chamaDetails) => {
     navigation.navigate("Messaging UI", chamaDetails);
