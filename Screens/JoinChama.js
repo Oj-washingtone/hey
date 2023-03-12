@@ -75,7 +75,7 @@ export default function JoinChamaScreen({ navigation }) {
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Start Chama")}>
           <Text style={[styles.startChamaText, styles.startChamaBtn]}>
-            Join the Chama
+            Create a Chama
           </Text>
         </TouchableOpacity>
       </View>

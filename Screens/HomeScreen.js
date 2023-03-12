@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 
 import { StatusBar } from "expo-status-bar";
-import { useRef, useState } from "react";
+import { useRef, useState, createContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -97,25 +97,26 @@ export default function HomeScreen({ navigation }) {
   ]);
 
   // get details of this user from firestore
+  useEffect(() => {
+    const getUserDetails = async (userId) => {
+      try {
+        const docRef = doc(db, "users", userId);
+        const docSnap = await getDoc(docRef);
 
-  const getUserDetails = async (userId) => {
-    try {
-      const docRef = doc(db, "users", userId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setUserDetails(docSnap.data());
-      } else {
-        console.log("No such document!");
+        if (docSnap.exists()) {
+          setUserDetails(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
-  if (userId) {
-    getUserDetails(userId);
-  }
+    if (userId) {
+      getUserDetails(userId);
+    }
+  }, [userId]);
 
   const openChama = (chamaDetails) => {
     navigation.navigate("Messaging UI", chamaDetails);
