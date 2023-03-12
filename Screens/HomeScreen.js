@@ -119,7 +119,7 @@ export default function HomeScreen({ navigation }) {
   // }, [userId]);
 
   const openChama = (chamaDetails) => {
-    navigation.navigate("Messaging UI", chamaDetails);
+    navigation.navigate("Chama", chamaDetails);
   };
 
   const handleJoinChama = () => {

@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import MainNavigation from "./MainNavigation";
-import MessagingUI from "../Screens/MessagingUI";
+import Chama from "../Screens/Chama";
 import DepositToWallet from "../Screens/DepositToWallet";
 import WithdrawFromWallet from "../Screens/WithdrawFromWallet";
 import JoinChamaScreen from "../Screens/JoinChama";
@@ -29,8 +29,8 @@ export default function UserStack() {
           }}
         />
         <Stack.Screen
-          name="Messaging UI"
-          component={MessagingUI}
+          name="Chama"
+          component={Chama}
           // options={{
           //   tabBarBadge: 3,
           // }}
