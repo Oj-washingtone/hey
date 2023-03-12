@@ -29,6 +29,8 @@ export default function UserAccount({ navigation }) {
   const [userDetails, setUserDetails] = useState({});
   const [chamaCount, setChamaCount] = useState(null);
 
+  const [bottoSheetVisible, setBottomSheetVisible] = useState(false);
+
   useEffect(() => {
     const getUserDetails = async () => {
       try {
@@ -55,6 +57,14 @@ export default function UserAccount({ navigation }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
+  const showBottomSheet = () => {
+    setBottomSheetVisible(true);
+  };
+
+  const dismissBottomSheet = () => {
+    setBottomSheetVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Show activity indicator while still loading user details */}
@@ -72,7 +82,11 @@ export default function UserAccount({ navigation }) {
           <View style={styles.mainActions}>
             <TouchableOpacity
               style={[styles.btnMain]}
-              onPress={() => navigation.navigate("Edit Profile")}
+              onPress={() =>
+                navigation.navigate("Edit Profile", {
+                  userDetails: userDetails,
+                })
+              }
             >
               <Text>Edit profile</Text>
             </TouchableOpacity>
