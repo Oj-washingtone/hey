@@ -141,10 +141,14 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.nameUser}>{userDetails.fullName}</Text>
         </View>
         <View style={styles.profileImageSection}>
-          <Image
-            style={styles.profileImage}
-            source={require("../assets/profilePictures/pp1.jpg")}
-          />
+          {userDetails.profilePicture ? (
+            <Image
+              style={styles.profileImage}
+              source={{ uri: currentDetails.profilePicture }}
+            />
+          ) : (
+            <Ioicons name="person-outline" size={30} color="black" />
+          )}
         </View>
       </View>
       {/* 3 */}
@@ -275,8 +279,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderRadius: 50 / 2,
-    backgroundColor: "#f2f3f5",
-    borderColor: "#f2f3f5",
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
     justifyContent: "center",
     alignItems: "center",
   },

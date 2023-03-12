@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import Ioicons from "react-native-vector-icons/Ionicons";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, signOut } from "firebase/auth";
@@ -76,7 +77,14 @@ export default function UserAccount({ navigation }) {
       ) : (
         <View style={styles.container}>
           <View style={styles.profilePictureWrapper}>
-            <Text>pp</Text>
+            {userDetails.profilePicture ? (
+              <Image
+                style={styles.profileImage}
+                source={{ uri: currentDetails.profilePicture }}
+              />
+            ) : (
+              <Ioicons name="person-outline" size={30} color="black" />
+            )}
           </View>
           <Text style={styles.userFullNAme}>{userDetails.fullName}</Text>
           <View style={styles.mainActions}>
@@ -149,11 +157,17 @@ const styles = StyleSheet.create({
   profilePictureWrapper: {
     width: 120,
     height: 120,
-    backgroundColor: "#ccc",
+    backgroundColor: "#f2f3f5",
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 50,
+  },
+
+  profileImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 120 / 2,
   },
 
   userFullNAme: {
