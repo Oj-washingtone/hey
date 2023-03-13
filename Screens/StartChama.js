@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Share } from "react-native";
+
 import {
   View,
   Text,
@@ -6,23 +8,16 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  TouchableWithoutFeedback,
+  T,
 } from "react-native";
 
 import { db } from "../config/firebase";
-import {
-  collection,
-  where,
-  query,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, signOut } from "firebase/auth";
-// material community icons
+
+// Icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function StartChamaScreen({ navigation }) {
@@ -98,9 +93,6 @@ export default function StartChamaScreen({ navigation }) {
       setLoading(false);
       setChamaCreated(true);
 
-      // navigate to  messaging UI with chama details
-      // navigation.navigate("Messaging UI", chamaDetails);
-
       // update has chama to true
       try {
         const userRef = doc(db, "users", user.uid);
@@ -116,15 +108,23 @@ export default function StartChamaScreen({ navigation }) {
   };
 
   const gotoChama = () => {
-    navigation.navigate("Chama", { chamaDetails: chamaDetails });
+    navigation.replace("Chama", { chamaDetails: chamaDetails });
+  };
+
+  const shareInvite = async () => {
+    try {
+      const result = await Share.share({
+        message: `I am inviting you to join  ${chamaDetails.chamaName} on ChamaSmart. Please use Chama code: ${chamaDetails.chamaCode}, and password: ${chamaDetails.chamaPassword} to join.`,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* If chama has been created successfully hide form and show chama details */}
       {chamaCreated ? (
         <View style={styles.chamaDetails}>
-          {/* Add a check icon from aterial community */}
           <MaterialCommunityIcons
             name="party-popper"
             size={64}
@@ -132,8 +132,6 @@ export default function StartChamaScreen({ navigation }) {
           />
 
           <Text style={styles.title}>Congratulations</Text>
-
-          {/* Display picture of peope icon */}
 
           <View style={styles.details}>
             <Text style={[styles.title, { marginBottom: 20 }]}>
@@ -157,14 +155,19 @@ export default function StartChamaScreen({ navigation }) {
             </Text>
 
             <View style={styles.actionWrapper}>
-              <TouchableOpacity style={[styles.btn]} activeOpacity={0.6}>
+              <TouchableOpacity
+                style={[styles.btn, styles.btnInvite]}
+                activeOpacity={0.6}
+                onPress={shareInvite}
+              >
                 <MaterialCommunityIcons
-                  name="account-multiple-plus"
+                  name="account-multiple-plus-outline"
                   size={24}
                   color="#000"
                 />
-                <Text style={styles.actionsText}>Invite Members</Text>
+                <Text style={styles.inviteTextBtn}>Invite members </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={[styles.btn]}
                 activeOpacity={0.6}
@@ -174,7 +177,7 @@ export default function StartChamaScreen({ navigation }) {
                 <MaterialCommunityIcons
                   name="arrow-right"
                   size={24}
-                  color="#000"
+                  color="#fff"
                 />
               </TouchableOpacity>
             </View>
@@ -365,17 +368,39 @@ const styles = StyleSheet.create({
     width: "auto",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#000",
     flexDirection: "row",
   },
 
   actionsText: {
+    color: "#fff",
+    fontWeight: "bold",
     marginHorizontal: 10,
+  },
+
+  inviteWrapper: {
+    width: "100%",
+    marginTop: 20,
+  },
+
+  socialButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // width: "60%",
+    marginTop: 20,
+  },
+
+  btnInvite: {
+    backgroundColor: "#fff",
+  },
+
+  inviteTextBtn: {
+    marginLeft: 10,
   },
 });
 
