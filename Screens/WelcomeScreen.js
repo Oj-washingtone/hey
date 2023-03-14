@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
   },
 
   signupBtn: {
-    backgroundColor: "#4fb448",
-    borderColor: "#4fb448",
+    backgroundColor: "#ed4746",
+    borderColor: "#ed4746",
   },
 
   signupBtnText: {

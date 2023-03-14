@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     right: 40,
   },
   mainButton: {
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     elevation: 3,
   },
   button: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     height: "auto",
     padding: 7,
     borderRadius: 40 / 2,
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     justifyContent: "center",
     alignItems: "center",
     right: 20,

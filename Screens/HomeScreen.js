@@ -168,14 +168,14 @@ export default function HomeScreen({ navigation }) {
           style={styles.walletActionButton}
           onPress={() => navigation.navigate("Deposit")}
         >
-          <Ioicons name="add-circle" size={24} color="#4fb448" />
+          <Ioicons name="add-circle" size={24} color="#ed4746" />
           <Text style={styles.walletActionButtonText}>Deposit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.walletActionButton}
           onPress={() => navigation.navigate("Withdraw")}
         >
-          <Ioicons name="arrow-down-circle" size={24} color="#4fb448" />
+          <Ioicons name="arrow-down-circle" size={24} color="#ed4746" />
           <Text style={styles.walletActionButtonText}>Witdraw</Text>
         </TouchableOpacity>
 
@@ -183,7 +183,7 @@ export default function HomeScreen({ navigation }) {
           style={styles.walletActionButton}
           // onPress={openBottonSheet}
         >
-          <Ioicons name="alarm" size={24} color="#4fb448" />
+          <Ioicons name="alarm" size={24} color="#ed4746" />
           <Text style={styles.walletActionButtonText}>Schedule</Text>
         </TouchableOpacity>
       </View>
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   },
 
   messageCounter: {
-    backgroundColor: "#bd0832",
+    backgroundColor: "#ed4746",
     color: "#fff",
     borderRadius: 10,
     paddingHorizontal: 5,

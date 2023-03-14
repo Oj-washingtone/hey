@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
 
   logoText2: {
-    color: "#4fb448",
+    color: "#ed4746",
   },
 
   inputField: {
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "80%",
     borderRadius: 20,
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     padding: 7,
     marginTop: 20,
     alignItems: "center",
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   signupRedirectText: {
     fontWeight: "bold",
-    color: "#4fb448",
+    color: "#ed4746",
     fontSize: 15,
   },
   error: {

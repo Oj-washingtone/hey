@@ -188,5 +188,6 @@ const styles = StyleSheet.create({
 
   backSpaceBtn: {
     color: "#bd0832",
+    // #ed4746
   },
 });

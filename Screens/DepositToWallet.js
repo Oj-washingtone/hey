@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderRightWidth: 0,
     borderLeftWidth: 0,
-    borderColor: "#4fb448",
+    borderColor: "#ccc",
     width: "80%",
     padding: 10,
     textAlign: "center",
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
 
   depositBtn: {
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     width: "80%",
     padding: 10,
     alignItems: "center",

@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 7,
     paddingHorizontal: 10,
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
 
   joinChamaBtn: {
-    color: "#4fb448",
+    color: "#ed4746",
   },
 
   error: {
