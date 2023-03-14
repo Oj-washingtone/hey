@@ -391,7 +391,6 @@ const styles = StyleSheet.create({
   socialButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // width: "60%",
     marginTop: 20,
   },
 
