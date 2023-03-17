@@ -1,0 +1,182 @@
+/**
+ * Primary colors
+ *
+ * Generic gradient
+ *
+ * #bd0832 // not used
+ * #ed4746
+ * #D23D74
+ * #A04A8E
+ * #67538F
+ * #3B5179
+ * #2F4858
+ *
+ * matching gradient
+ * #ED4746
+ * #E83672
+ * #D03F9B
+ * #A353BBs
+ * #5F64CD
+ * #006FCD
+ *
+ *
+ * Skip gradient
+ * #ED4746
+ * #FFBDEF
+ * #FA86B7
+ * #BF5082
+ */
+
+/**
+ * Data mining class notes
+ * Slicing and dicing, and pivoting data -  rotate the data and get what you want from it
+ *
+ * Designing the data warehouse
+ * View in designing the data warehouse (Functional storage in data warehouse)
+ *
+ * Data warehouse process
+ * Top down - overal designing and planning first then you move to the details
+ * Bottom up starts with experiments and prototypes and then you move to the details
+ * The above two can be sumarised into waterfall
+ * ETLR - Extract, Transform, Load, Report
+ * Olap Engine - Online Analytical Processing engine - used to query the data warehouse
+ *
+ * Several data mats put together gives you a data warehouse
+ * Data mart - a subset of the data warehouse - you chaeck if they are independent of each other or depends on each other
+ *
+ * Data warehouse is a collection of data marts
+ * Data mart is a collection of data mats
+ * Data mat is a collection of data cubes
+ * Data cube is a collection of data cells
+ * Data cell is a collection of data points
+ * Data point is a collection of data
+ * Data is a collection of facts
+ * Facts are the data
+ *
+ * Recommended approach in modeling data warehouse
+ * 1. Start with the business process
+ * 2. Identify the data sources
+ * 3. Identify the data marts
+ * 4. Identify the data cubes
+ * 5. Identify the data cells
+ * 6. Identify the data points
+ * 7. Identify the data
+ * 8. Identify the facts
+ *
+ *
+ * Enterprise Data Warehouse /  multi tire data warehouse - 3 tier data warehouse
+ * 1. Data warehouse
+ * 2. Data mart
+ * 3. Data mat
+ * 4. Data cube
+ * 5. Data cell
+ * 6. Data point
+ * 7. Data
+ * 8. Facts
+ *
+ * OLAP SERVER ARCHITECTURE
+ * Relational Olap Server - ROLAP
+ * Multidimensional Olap Server - MOLAP
+ * Hybrid Olap Server - HOLAP
+ *
+ * Apex cuboid, we do aggregation on the data - surmising the data at that level
+ *
+ *
+ * Metadata repository - stores the metadata - data that describes the data
+ * There are the following kinds
+ * 1. Data dictionary - stores the metadata about the data warehouse
+ * 2. Data catalog - stores the metadata about the data warehouse
+ * 3. Data warehouse schema - stores the metadata about the data warehouse
+ * 4. Data warehouse dictionary - stores the metadata about the data warehouse
+ * 5. Data warehouse catalog - stores the metadata about the data warehouse
+ * 6. Data warehouse metadata - stores the metadata about the data warehouse
+ * 7. Data warehouse metadata repository - stores the metadata about the data warehouse
+ *
+ * Moving from OLAP to OLAM
+ * OLAM - Online Analytical Mining
+ *
+ *  one does analysis and the other does mining
+ *
+ *
+ */
+
+
+ chamaSection: {
+    flex: 2.3,
+    marginTop: 50,
+  },
+
+  title: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "gray",
+    marginBottom: 20,
+  },
+
+  chama: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 10,
+    width: "100%",
+  },
+
+  chamaImageSection: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    backgroundColor: "#f2f3f5",
+    borderColor: "#f2f3f5",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 15,
+  },
+  chamaDP: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50 / 2,
+  },
+
+  chamaDetails: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: screenWidth - 130,
+  },
+
+  chamaName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  messageAt: {
+    color: "gray",
+  },
+
+  chamaRecentMessages: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  messageCounter: {
+    backgroundColor: "#ed4746",
+    color: "#fff",
+    borderRadius: 10,
+    paddingHorizontal: 5,
+  },
+
+  noChama: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChamaText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "gray",
+    width: "70%",
+    textAlign: "center",
+  },

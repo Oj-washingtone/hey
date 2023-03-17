@@ -38,6 +38,7 @@ export default function MainNavigation() {
         component={HomeScreen}
         options={{
           title: "Chama Smart",
+          // headerShown: false,
         }}
       />
       <Tab.Screen name="Inbox" component={Chats} />

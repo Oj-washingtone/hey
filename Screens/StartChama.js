@@ -76,17 +76,7 @@ export default function StartChamaScreen({ navigation }) {
         chamaCode: chamaCode,
         chamaPassword: chamaPassword,
         chamaWallet: chamaWallet,
-        chamaMembers: [
-          {
-            userId: userId,
-            role: "admin",
-            savings: 0,
-            loans: 0,
-            interestOnSvaings: 0,
-            interestOnLoans: 0,
-            creditScore: 0,
-          },
-        ],
+        chamaMembers: [userId],
         chamaDP: "",
       });
 
