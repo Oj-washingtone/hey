@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const openChama = (chamaDetails) => {
-    navigation.navigate("Chama", chamaDetails);
+    navigation.navigate("Chama", { chamaDetails: chamaDetails });
   };
 
   return (
@@ -91,7 +91,11 @@ export default function HomeScreen({ navigation }) {
       {userDetails.fullName ? (
         <View style={styles.body}>
           <Wallet />
-          <ChamaList handleOpenChama={openChama} userId={userId} />
+          <ChamaList
+            navigate={navigation}
+            handleOpenChama={openChama}
+            userId={userId}
+          />
           <FloatingActionButton
             onJoinChamaPress={handleJoinChama}
             onCreateChamaPress={handleStartChama}

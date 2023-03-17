@@ -21,13 +21,14 @@ import {
   Dimensions,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
 import Ioicons from "react-native-vector-icons/Ionicons";
-import { Icon } from "react-native-elements";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function ChamaList(props) {
   const userId = props.userId;
+  const navigation = useNavigation();
 
   const [chamaRooms, setChamaRooms] = useState(undefined);
 
@@ -52,13 +53,12 @@ export default function ChamaList(props) {
   getChamaRooms(userId);
   // }, [userId]);
 
-  console.log(chamaRooms);
+  const openChama = (chamaDetails) => {
+    navigation.navigate("Chama", { chamaDetails: chamaDetails });
+  };
 
   const renderChamaRooms = ({ item }) => (
-    <TouchableOpacity
-      style={styles.chama}
-      //   onPress={() => navigation.navigate("ChamaRoom")}
-    >
+    <TouchableOpacity style={styles.chama} onPress={() => openChama(item)}>
       <View style={styles.chamaDPsection}>
         {item.chamaDP ? (
           <Ioicons name="wallet" size={18} color="#D03F9B" />
