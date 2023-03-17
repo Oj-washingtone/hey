@@ -1,9 +1,10 @@
 import { StyleSheet, View, Text } from "react-native";
+import { useEffect, useState } from "react";
 
 export default function Chats() {
   return (
     <View style={styles.container}>
-      <Text>Direct Chats</Text>
+      <Text>Chats</Text>
     </View>
   );
 }

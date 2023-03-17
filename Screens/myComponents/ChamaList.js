@@ -72,8 +72,9 @@ export default function ChamaList(props) {
           <Text style={styles.chamaName}>{item.chamaName}</Text>
           <Text>10: 30am</Text>
         </View>
-        <View>
+        <View style={styles.messageAndCounterWraper}>
           <Text>This is the latest message to come in</Text>
+          <Text style={styles.unreadMessageCounter}>1</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
   },
 
   chamaDetails: {
-    // calculate width from dimensions
     width: screenWidth - 120,
   },
 
@@ -180,5 +180,23 @@ const styles = StyleSheet.create({
   searchInputText: {
     marginLeft: 10,
     width: "100%",
+  },
+
+  messageAndCounterWraper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  unreadMessageCounter: {
+    backgroundColor: "#006FCD",
+    color: "#fff",
+    borderRadius: 20,
+    height: 15,
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 10,
+    paddingHorizontal: 5,
+    fontWeight: "bold",
   },
 });
