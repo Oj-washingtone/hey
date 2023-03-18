@@ -33,25 +33,25 @@ export default function ChamaList(props) {
   const [chamaRooms, setChamaRooms] = useState(undefined);
 
   // load chamas from firestore where this user is a chamaMember
-  // useEffect(() => {
-  const getChamaRooms = async (userId) => {
-    try {
-      const q = query(
-        collection(db, "chamas"),
-        where("chamaMembers", "array-contains", userId)
-      );
-      const querySnapshot = await getDocs(q);
-      const chamaRooms = [];
-      querySnapshot.forEach((doc) => {
-        chamaRooms.push(doc.data());
-      });
-      setChamaRooms(chamaRooms);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  getChamaRooms(userId);
-  // }, [userId]);
+  useEffect(() => {
+    const getChamaRooms = async (userId) => {
+      try {
+        const q = query(
+          collection(db, "chamas"),
+          where("chamaMembers", "array-contains", userId)
+        );
+        const querySnapshot = await getDocs(q);
+        const chamaRooms = [];
+        querySnapshot.forEach((doc) => {
+          chamaRooms.push(doc.data());
+        });
+        setChamaRooms(chamaRooms);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getChamaRooms(userId);
+  }, [userId]);
 
   const openChama = (chamaDetails) => {
     navigation.navigate("Chama", { chamaDetails: chamaDetails });

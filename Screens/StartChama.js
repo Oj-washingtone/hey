@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  T,
 } from "react-native";
 
 import { db } from "../config/firebase";
@@ -78,6 +77,15 @@ export default function StartChamaScreen({ navigation }) {
         chamaWallet: chamaWallet,
         chamaMembers: [userId],
         chamaDP: "",
+        // messages within the space
+        messages: [
+          {
+            message: "Welcome to ChamaSmart",
+            sender: "ChamaSmart",
+            timestamp: new Date(),
+            id: "1",
+          },
+        ],
       });
 
       setLoading(false);
