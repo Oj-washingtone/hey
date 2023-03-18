@@ -95,6 +95,7 @@ export default function HomeScreen({ navigation }) {
             navigate={navigation}
             handleOpenChama={openChama}
             userId={userId}
+            userName={userDetails.fullName}
           />
           <FloatingActionButton
             onJoinChamaPress={handleJoinChama}

@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
+  ImageBackground,
 } from "react-native";
 
 // import icons from react-native-vector-icons
@@ -68,7 +69,8 @@ export default function Chama({ navigation, route }) {
       await updateDoc(messageRef, {
         messages: arrayUnion({
           message: message,
-          sender: userId,
+          senderID: userId,
+          senderName: route.params.userName,
           timestamp: new Date(),
           id: Math.random().toString(36).substring(7),
         }),
@@ -83,9 +85,12 @@ export default function Chama({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.messagingWraper}>
-        <Messages chamaCode={chamaDetails.chamaCode} />
-      </View>
+      <ImageBackground
+        source={require("../assets/chat_bg.jpg")}
+        style={styles.messagingWraper}
+      >
+        <Messages chamaCode={chamaDetails.chamaCode} userId={userId} />
+      </ImageBackground>
 
       {visibleModal && (
         <View style={styles.moreActionsWrapper}>

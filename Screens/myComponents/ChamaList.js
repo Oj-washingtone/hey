@@ -28,6 +28,8 @@ const screenWidth = Dimensions.get("window").width;
 
 export default function ChamaList(props) {
   const userId = props.userId;
+  const userName = props.userName;
+
   const navigation = useNavigation();
 
   const [chamaRooms, setChamaRooms] = useState(undefined);
@@ -54,7 +56,10 @@ export default function ChamaList(props) {
   }, [userId]);
 
   const openChama = (chamaDetails) => {
-    navigation.navigate("Chama", { chamaDetails: chamaDetails });
+    navigation.navigate("Chama", {
+      chamaDetails: chamaDetails,
+      userName: userName,
+    });
   };
 
   const renderChamaRooms = ({ item }) => (
