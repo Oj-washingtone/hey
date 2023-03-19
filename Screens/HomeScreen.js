@@ -22,6 +22,7 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
+// import { Swipeable } from "react-native-gesture-handler";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, getIdToken, signOut } from "firebase/auth";

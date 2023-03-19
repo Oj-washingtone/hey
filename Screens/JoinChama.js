@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     fontWeight: "bold",
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
 
   startChamaBtn: {
-    color: "#4fb448",
+    color: "#ed4746",
     fontWeight: "bold",
     marginLeft: 5,
   },

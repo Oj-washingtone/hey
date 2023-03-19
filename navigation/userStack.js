@@ -3,6 +3,9 @@
  */
 
 // import navigation container and navigation stack
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import Ioicons from "react-native-vector-icons/Ionicons";
+import MCIicons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -31,9 +34,22 @@ export default function UserStack() {
         <Stack.Screen
           name="Chama"
           component={Chama}
-          // options={{
-          //   tabBarBadge: 3,
-          // }}
+          options={{
+            // add voice call video call and more options buttons to the right
+            headerRight: () => (
+              <View style={{ flexDirection: "row", marginRight: 10 }}>
+                <TouchableOpacity style={styles.btn}>
+                  <MCIicons name="phone" size={24} color="#ed4746" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn}>
+                  <MCIicons name="video-outline" size={24} color="#ed4746" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn}>
+                  <MCIicons name="dots-vertical" size={24} color="#ed4746" />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
         />
         <Stack.Screen name="Withdraw" component={WithdrawFromWallet} />
         <Stack.Screen name="Deposit" component={DepositToWallet} />
@@ -44,3 +60,9 @@ export default function UserStack() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  btn: {
+    marginLeft: 20,
+  },
+});

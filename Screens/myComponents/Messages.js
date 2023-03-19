@@ -8,9 +8,6 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
 } from "react-native";
 
 export default function Messages(props) {
@@ -33,33 +30,76 @@ export default function Messages(props) {
     };
   }, [chamaCode]);
 
-  const renderMessages = ({ item }) => (
-    <View style={styles.messageContainer}>
-      {/* Add activity indicator if messeges are still loading */}
-      {messages.length === 0 && (
-        <ActivityIndicator size="large" color="#D03F9B" />
-      )}
-      <View
-        style={[
-          styles.message,
-          item.senderID === props.userId && styles.myMessage,
-        ]}
-      >
-        <View style={styles.messageDetails}>
-          <Text style={styles.sender}>{item.senderName}</Text>
-          <Text style={styles.messageDetailsText}>{item.time}</Text>
+  // group messages by date
+  const groupedMessages = messages.reduce((groups, message) => {
+    const date = new Date(
+      message.timestamp.seconds * 1000
+    ).toLocaleDateString();
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(message);
+    return groups;
+  }, {});
+
+  const renderMessages = ({ item, index }) => {
+    const date = new Date(item.timestamp.seconds * 1000).toLocaleDateString();
+    const isFirstMessageOfDateGroup =
+      index === 0 ||
+      date !==
+        new Date(
+          messages[index - 1].timestamp.seconds * 1000
+        ).toLocaleDateString();
+    return (
+      <>
+        {isFirstMessageOfDateGroup && renderDateHeader(date)}
+        <View style={styles.messageContainer}>
+          <View
+            style={[
+              styles.message,
+              item.senderID === props.userId && styles.myMessage,
+            ]}
+          >
+            <View style={styles.messageDetails}>
+              <Text style={styles.sender}>{item.senderName}</Text>
+            </View>
+            <View style={styles.messageandTime}>
+              <Text
+                style={[
+                  styles.messageText,
+                  item.senderID !== props.userId && styles.otherMessageText,
+                ]}
+              >
+                {item.message}
+              </Text>
+
+              <Text style={styles.messageTime}>
+                {item.timestamp &&
+                  new Date(item.timestamp.seconds * 1000).toLocaleTimeString(
+                    [],
+                    {
+                      hour: "numeric",
+                      minute: "numeric",
+                    }
+                  )}
+              </Text>
+            </View>
+          </View>
         </View>
-        <Text
-          style={[
-            styles.messageText,
-            item.senderID !== props.userId && styles.otherMessageText,
-          ]}
-        >
-          {item.message}
-        </Text>
+      </>
+    );
+  };
+
+  const renderDateHeader = (date) => {
+    const today = new Date().toLocaleDateString();
+    const headerText = date === today ? "Today" : date;
+
+    return (
+      <View style={styles.dateHeader}>
+        <Text style={styles.dateHeaderText}>{headerText}</Text>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -67,8 +107,9 @@ export default function Messages(props) {
         data={messages}
         renderItem={renderMessages}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={() => <ActivityIndicator size="large" />}
+        ref={flatListRef}
         showsVerticalScrollIndicator={false}
-        // inverted
       />
     </View>
   );
@@ -83,8 +124,6 @@ const styles = StyleSheet.create({
   messageContainer: {
     width: "auto",
     flexDirection: "column",
-    margin: 5,
-    // backgroundColor: "#fff",
   },
 
   message: {
@@ -99,6 +138,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     elevation: 3,
     alignSelf: "flex-start",
+    marginHorizontal: 10,
   },
 
   myMessage: {
@@ -121,7 +161,26 @@ const styles = StyleSheet.create({
     color: "#D03F9B",
   },
 
-  //   otherMessageText: {
-  //     color: "#fff",
-  //   },
+  messageTime: {
+    marginLeft: 10,
+    color: "gray",
+    textAlign: "right",
+    marginTop: 5,
+    fontSize: 11,
+  },
+
+  dateHeader: {
+    elevation: 3,
+    padding: 5,
+    opacity: 0.4,
+    backgroundColor: "#fff",
+  },
+
+  dateHeaderText: {
+    textAlign: "center",
+  },
+
+  // otherMessageText: {
+  //   color: "#fff",
+  // },
 });
