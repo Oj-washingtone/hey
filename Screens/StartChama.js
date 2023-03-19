@@ -19,11 +19,12 @@ import { getAuth, signOut } from "firebase/auth";
 // Icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function StartChamaScreen({ navigation }) {
+export default function StartChamaScreen({ navigation, route }) {
   const user = useAuthentication();
   const auth = getAuth();
 
   const userId = user?.uid;
+  const userName = route.params?.userName;
 
   const [loading, setLoading] = useState(false);
   const [chamaDetails, setChamaDetails] = useState({
@@ -80,12 +81,42 @@ export default function StartChamaScreen({ navigation }) {
         // messages within the space
         messages: [
           {
-            message: "Welcome to ChamaSmart",
-            sender: "ChamaSmart",
+            message: `Welcome to ${chamaCreated.chamaName}`,
+            senderID: "ChamaSmart",
+            senderName: "Chama Smart",
             timestamp: new Date(),
             id: "1",
           },
+
+          {
+            message:
+              "In this space, you will be able to do your chama governed by yur own rules. you can define rules to automate financial processes, and govern memberships, and the app will take care of implementing and enforcing the rules you and your members define ",
+            senderID: "ChamaSmart",
+            senderName: "Chama Smart",
+            timestamp: new Date(),
+            id: "2",
+          },
+
+          {
+            message:
+              "To start creating the rules, you need to admit at least three members.",
+            senderID: "ChamaSmart",
+            senderName: "Chama Smart",
+            timestamp: new Date(),
+            id: "3",
+          },
+
+          {
+            message:
+              "Your team can always contact us by starting your message with @ChamaSmart, and well always ready to respond. \n Happy Chamaing ;)",
+            senderID: "ChamaSmart",
+            senderName: "Chama Smart",
+            timestamp: new Date(),
+            id: "4",
+          },
         ],
+        // members on waiting list to join this chama
+        memberWaitList: [],
       });
 
       setLoading(false);
@@ -106,7 +137,11 @@ export default function StartChamaScreen({ navigation }) {
   };
 
   const gotoChama = () => {
-    navigation.replace("Chama", { chamaDetails: chamaDetails });
+    navigation.replace("Chama", {
+      chamaDetails: chamaDetails,
+      userId: userId,
+      userName: userName,
+    });
   };
 
   const shareInvite = async () => {

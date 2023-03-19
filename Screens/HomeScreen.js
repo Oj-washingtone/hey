@@ -74,11 +74,14 @@ export default function HomeScreen({ navigation }) {
   //
 
   const handleJoinChama = () => {
-    navigation.navigate("Join Chama");
+    navigation.navigate("Join Chama", { userName: userDetails.fullName });
   };
 
   const handleStartChama = () => {
-    navigation.navigate("Start Chama");
+    navigation.navigate("Start Chama", {
+      userId: userId,
+      userName: userDetails.fullName,
+    });
   };
 
   const openChama = (chamaDetails) => {
@@ -101,6 +104,7 @@ export default function HomeScreen({ navigation }) {
           <FloatingActionButton
             onJoinChamaPress={handleJoinChama}
             onCreateChamaPress={handleStartChama}
+            userName={userDetails.fullName}
           />
         </View>
       ) : (

@@ -1,3 +1,17 @@
+import { db } from "../config/firebase";
+import {
+  collection,
+  where,
+  query,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  get,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+
 import { useState } from "react";
 import {
   View,
@@ -8,13 +22,22 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-export default function JoinChamaScreen({ navigation }) {
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { getAuth, getIdToken, signOut } from "firebase/auth";
+
+export default function JoinChamaScreen({ navigation, route }) {
+  const user = useAuthentication();
+  const auth = getAuth();
+
+  const userId = user?.uid;
+
   const [loading, setLoading] = useState(false);
 
   const [chamaDetails, setChamaDetails] = useState({
     chamaCode: "",
     chamaPassword: "",
     error: "",
+    success: "",
   });
 
   const joinChama = async () => {
@@ -24,20 +47,104 @@ export default function JoinChamaScreen({ navigation }) {
         ...chamaDetails,
         error: "Please fill in all the required fields",
       });
-
       return;
     }
 
-    // check if chama code is valid
-    // check if chama password is valid
-    // check if user is already a member of the chama
-    // if all is well, add user to chama
+    // check if chamacode and password is valid
+    setLoading(true);
+    const chamaRef = doc(db, "chamas", chamaDetails.chamaCode);
+    const chamaDoc = await getDoc(chamaRef);
+
+    if (!chamaDoc.exists()) {
+      setChamaDetails({
+        ...chamaDetails,
+        error: "Invalid chama code or password",
+      });
+
+      setLoading(false);
+      return;
+    }
+
+    const chamaData = chamaDoc.data();
+    if (chamaData.chamaPassword !== chamaDetails.chamaPassword) {
+      setChamaDetails({
+        ...chamaDetails,
+        error: "Invalid chama code or password",
+      });
+
+      setLoading(false);
+      return;
+    }
+
+    // if valid, check if user is already a member of the chama
+    if (chamaData.chamaMembers.includes(userId)) {
+      setChamaDetails({
+        ...chamaDetails,
+        error: "You are already a member of this chama",
+      });
+
+      setLoading(false);
+      return;
+    }
+
+    // check if user is already in the wait list
+    if (chamaData.memberWaitList.includes(userId)) {
+      setChamaDetails({
+        ...chamaDetails,
+        success: "",
+        error:
+          "You are already in the wait list for this chama, you will be notified as soon as the chama approves your membership request",
+      });
+
+      setLoading(false);
+      return;
+    }
+
+    // if all is well, add user to chama wait list
+    await updateDoc(chamaRef, {
+      memberWaitList: arrayUnion(userId),
+    });
+    setLoading(false);
+
+    // set set success message and if any error message remove them
+    setChamaDetails({
+      ...chamaDetails,
+      success:
+        "You have been added to the wait list for this chama, you will be notified as soon as the chama approves your membership request",
+      error: "",
+    });
+
+    // send message to this chama about the user wishing to join the chama
+    const messageRef = doc(db, "chamas", chamaDetails.chamaCode.toString());
+    try {
+      await updateDoc(messageRef, {
+        messages: arrayUnion({
+          message: `${route.params.userName} is requesting to join this chama`,
+          senderID: "Chama Smart",
+          senderName: "Chama Smart",
+          timestamp: new Date(),
+          id: Math.random().toString(36).substring(7),
+        }),
+      });
+
+      setMessage("");
+      setShowOptions(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
+
   return (
     <View style={styles.container}>
       {!!chamaDetails.error && (
         <View style={styles.error}>
           <Text style={styles.errorMessage}>{chamaDetails.error}</Text>
+        </View>
+      )}
+
+      {!!chamaDetails.success && (
+        <View style={styles.success}>
+          <Text style={styles.successMessage}>{chamaDetails.success}</Text>
         </View>
       )}
 
@@ -156,5 +263,21 @@ const styles = StyleSheet.create({
     color: "#ed4746",
     fontWeight: "bold",
     marginLeft: 5,
+  },
+
+  success: {
+    backgroundColor: "#d4edda",
+    borderColor: "#c3e6cb",
+    borderWidth: 1,
+    padding: 5,
+    paddingHorizontal: 20,
+    width: "80%",
+    borderRadius: 20,
+    marginBottom: 10,
+  },
+
+  successMessage: {
+    color: "#155724",
+    textAlign: "center",
   },
 });

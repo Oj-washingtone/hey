@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   messagingWraper: {
     flex: 1,
     width: "100%",
-    // padding: 10,
+    padding: 10,
     backgroundColor: "#f2f3f5",
   },
   messageInputWrapper: {

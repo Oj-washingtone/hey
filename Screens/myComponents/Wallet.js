@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import Ioicons from "react-native-vector-icons/Ionicons";
 
 export default function Wallet() {
@@ -28,7 +34,10 @@ export default function Wallet() {
   };
 
   return (
-    <View style={[styles.wallet, { height: seeBalance.walletSize }]}>
+    <ImageBackground
+      source={require("../../assets/wallet_bg.jpg")}
+      style={[styles.wallet, { height: seeBalance.walletSize }]}
+    >
       <View style={[styles.walletHeader]}>
         <Text style={styles.walletTitle}>Your wallet balance</Text>
         {/* Eye icon to allow users to show hide their wallet balance */}
@@ -62,7 +71,7 @@ export default function Wallet() {
         <Ioicons name="wallet" size={18} color="#D03F9B" />
         <Text style={styles.walletNumber}>0811232314</Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
