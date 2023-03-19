@@ -120,6 +120,8 @@ export default function JoinChamaScreen({ navigation, route }) {
       await updateDoc(messageRef, {
         messages: arrayUnion({
           message: `${route.params.userName} is requesting to join this chama`,
+          for: userId,
+          type: "membership",
           senderID: "Chama Smart",
           senderName: "Chama Smart",
           timestamp: new Date(),

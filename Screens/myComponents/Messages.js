@@ -1,5 +1,13 @@
 import { db } from "../../config/firebase";
-import { collection, doc, onSnapshot, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import {
@@ -8,12 +16,21 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 
 export default function Messages(props) {
   const chamaCode = props.chamaCode;
+
+  const chamaAdmins = props.chamaDetails?.chamaAdmins;
+
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
+
+  const [newUserAction, setNewUserAction] = useState({
+    action: "",
+    user: "",
+  });
 
   useEffect(() => {
     const chamaRef = doc(db, "chamas", chamaCode.toString());
@@ -29,6 +46,59 @@ export default function Messages(props) {
       unsubscribe();
     };
   }, [chamaCode]);
+
+  // Add new member to chama
+  const addMemberToChama = async (memberId) => {
+    const chamaRef = doc(db, "chamas", chamaCode.toString());
+    try {
+      await updateDoc(chamaRef, {
+        chamaMembers: arrayUnion(memberId),
+        memberWaitList: arrayRemove(memberId),
+      });
+
+      // add approved to the message that requested admission of this user
+      const messagesRef = doc(db, "chamas", chamaCode.toString());
+      const messagesDoc = await getDoc(messagesRef);
+      const messagesList = messagesDoc.data().messages;
+      const newMessagesList = messagesList.map((message) => {
+        if (message.for === memberId) {
+          message.approved = true;
+        }
+        return message;
+      });
+      await updateDoc(messagesRef, {
+        messages: newMessagesList,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // decline member from joining chama
+  const declineMember = async (memberId) => {
+    const chamaRef = doc(db, "chamas", chamaCode.toString());
+    try {
+      await updateDoc(chamaRef, {
+        memberWaitList: arrayRemove(memberId),
+      });
+
+      // add approved to the message that requested admission of this user
+      const messagesRef = doc(db, "chamas", chamaCode.toString());
+      const messagesDoc = await getDoc(messagesRef);
+      const messagesList = messagesDoc.data().messages;
+      const newMessagesList = messagesList.map((message) => {
+        if (message.for === memberId) {
+          message.declined = true;
+        }
+        return message;
+      });
+      await updateDoc(messagesRef, {
+        messages: newMessagesList,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // group messages by date
   const groupedMessages = messages.reduce((groups, message) => {
@@ -61,7 +131,11 @@ export default function Messages(props) {
             ]}
           >
             <View style={styles.messageDetails}>
-              <Text style={styles.sender}>{item.senderName}</Text>
+              {chamaAdmins.includes(item.senderID) ? (
+                <Text style={styles.sender}>{item.senderName} (Admin)</Text>
+              ) : (
+                <Text style={styles.sender}>{item.senderName}</Text>
+              )}
             </View>
             <View style={styles.messageandTime}>
               <Text
@@ -83,6 +157,43 @@ export default function Messages(props) {
                     }
                   )}
               </Text>
+
+              {/* Add buttons depending on type of message */}
+              {item.type === "membership" &&
+                // only show buttons if the user is an admin
+                chamaAdmins.includes(props.userId) &&
+                // only show if approved is false else show approved
+                !item.approved &&
+                !item.declined && (
+                  <View style={styles.mebershipBtns}>
+                    <TouchableOpacity
+                      style={[styles.button, styles.acceptBtn]}
+                      onPress={() => {
+                        addMemberToChama(item.for);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Accept</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.button, styles.declineBtn]}
+                      onPress={() => declineMember(item.for)}
+                    >
+                      <Text style={styles.buttonText}>Decline</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+              {item.type === "membership" && item.approved && (
+                <View style={styles.membershipAproval}>
+                  <Text style={styles.approvedText}>Approved by admin</Text>
+                </View>
+              )}
+
+              {item.type === "membership" && item.declined && (
+                <View style={styles.membershipAproval}>
+                  <Text style={styles.declinedText}>Declined by admin</Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -129,7 +240,7 @@ const styles = StyleSheet.create({
   message: {
     width: "auto",
     flexDirection: "column",
-    backgroundColor: "pink",
+    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 5,
     paddingHorizontal: 20,
@@ -142,7 +253,7 @@ const styles = StyleSheet.create({
   },
 
   myMessage: {
-    backgroundColor: "#fff",
+    backgroundColor: "#E4F7D2",
     alignSelf: "flex-end",
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 0,
@@ -178,6 +289,35 @@ const styles = StyleSheet.create({
 
   dateHeaderText: {
     textAlign: "center",
+  },
+
+  mebershipBtns: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  button: {
+    padding: 5,
+    alighItems: "center",
+  },
+
+  buttonText: {
+    color: "#217ffb",
+  },
+
+  membershipAproval: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+
+  approvedText: {
+    color: "#217ffb",
+  },
+
+  declinedText: {
+    color: "#ff0000",
   },
 
   // otherMessageText: {

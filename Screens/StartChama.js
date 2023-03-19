@@ -78,10 +78,12 @@ export default function StartChamaScreen({ navigation, route }) {
         chamaWallet: chamaWallet,
         chamaMembers: [userId],
         chamaDP: "",
+        chamaAdmins: [userId],
         // messages within the space
         messages: [
           {
             message: `Welcome to ${chamaCreated.chamaName}`,
+            type: "normal",
             senderID: "ChamaSmart",
             senderName: "Chama Smart",
             timestamp: new Date(),
@@ -91,6 +93,7 @@ export default function StartChamaScreen({ navigation, route }) {
           {
             message:
               "In this space, you will be able to do your chama governed by yur own rules. you can define rules to automate financial processes, and govern memberships, and the app will take care of implementing and enforcing the rules you and your members define ",
+            type: "normal",
             senderID: "ChamaSmart",
             senderName: "Chama Smart",
             timestamp: new Date(),
@@ -100,6 +103,7 @@ export default function StartChamaScreen({ navigation, route }) {
           {
             message:
               "To start creating the rules, you need to admit at least three members.",
+            type: "normal",
             senderID: "ChamaSmart",
             senderName: "Chama Smart",
             timestamp: new Date(),
@@ -109,6 +113,7 @@ export default function StartChamaScreen({ navigation, route }) {
           {
             message:
               "Your team can always contact us by starting your message with @ChamaSmart, and well always ready to respond. \n Happy Chamaing ;)",
+            type: "normal",
             senderID: "ChamaSmart",
             senderName: "Chama Smart",
             timestamp: new Date(),

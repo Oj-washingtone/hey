@@ -89,7 +89,11 @@ export default function Chama({ navigation, route }) {
         source={require("../assets/chat_bg.jpg")}
         style={styles.messagingWraper}
       >
-        <Messages chamaCode={chamaDetails.chamaCode} userId={userId} />
+        <Messages
+          chamaCode={chamaDetails.chamaCode}
+          userId={userId}
+          chamaDetails={chamaDetails}
+        />
       </ImageBackground>
 
       {visibleModal && (
@@ -111,7 +115,7 @@ export default function Chama({ navigation, route }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.attachmentBtns}>
                 <MCIicons name="music-note" size={24} color="#ed4746" />
-                <Text>Video</Text>
+                <Text>Audio</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.attachmentBtns}>
