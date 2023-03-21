@@ -18,6 +18,7 @@ import MCIicons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import ChamaDepositForm from "./myComponents/DepositTochama";
 import Messages from "./myComponents/Messages";
+import Header from "./myComponents/Header";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, getIdToken, signOut } from "firebase/auth";
@@ -85,6 +86,10 @@ export default function Chama({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <Header
+        chamaName={chamaDetails.chamaName}
+        chamaCode={chamaDetails.chamaCode}
+      />
       <ImageBackground
         source={require("../assets/chat_bg.jpg")}
         style={styles.messagingWraper}

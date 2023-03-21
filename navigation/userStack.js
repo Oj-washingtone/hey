@@ -17,6 +17,10 @@ import WithdrawFromWallet from "../Screens/WithdrawFromWallet";
 import JoinChamaScreen from "../Screens/JoinChama";
 import StartChamaScreen from "../Screens/StartChama";
 import EditProfile from "../Screens/EditProfile";
+import ChamaDetails from "../Screens/ChamaDetails";
+
+// Header right component
+import HeaderRight from "../Screens/myComponents/HeaderRight";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,28 +38,17 @@ export default function UserStack() {
         <Stack.Screen
           name="Chama"
           component={Chama}
-          options={{
-            // add voice call video call and more options buttons to the right
-            headerRight: () => (
-              <View style={{ flexDirection: "row", marginRight: 10 }}>
-                <TouchableOpacity style={styles.btn}>
-                  <MCIicons name="phone" size={24} color="#ed4746" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn}>
-                  <MCIicons name="video-outline" size={24} color="#ed4746" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btn}>
-                  <MCIicons name="dots-vertical" size={24} color="#ed4746" />
-                </TouchableOpacity>
-              </View>
-            ),
-          }}
+          options={({ navigation }) => ({
+            headerRight: () => <HeaderRight navigation={navigation} />,
+            headerShown: false,
+          })}
         />
         <Stack.Screen name="Withdraw" component={WithdrawFromWallet} />
         <Stack.Screen name="Deposit" component={DepositToWallet} />
         <Stack.Screen name="Join Chama" component={JoinChamaScreen} />
         <Stack.Screen name="Start Chama" component={StartChamaScreen} />
         <Stack.Screen name="Edit Profile" component={EditProfile} />
+        <Stack.Screen name="Chama Details" component={ChamaDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

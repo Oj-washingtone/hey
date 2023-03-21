@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     padding: 5,
     opacity: 0.4,
     backgroundColor: "#fff",
+    marginVertical: 20,
   },
 
   dateHeaderText: {
