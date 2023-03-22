@@ -1,4 +1,18 @@
-import React, { useState, useRef } from "react";
+import { db } from "../../config/firebase";
+import {
+  collection,
+  where,
+  query,
+  doc,
+  getDoc,
+  exists,
+  getDocs,
+  setDoc,
+  get,
+  onSnapshot,
+} from "firebase/firestore";
+
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -17,7 +31,16 @@ import HeaderRight from "./HeaderRight";
 export default function Header(props) {
   const navigation = useNavigation();
 
+  const chamaName = props.chamaName;
+  const chamaCode = props.chamaCode;
+
+  console.log("Chama name: ", chamaName);
+  console.log("Chama code: ", chamaCode);
+
   const [showMenu, setShowMenu] = useState(false);
+  const [chamaMembers, setChamaMembers] = useState([]);
+
+  // get all members from chama mambers array in chamas collection
 
   const handleMenuPress = () => {
     setShowMenu(!showMenu);
@@ -26,6 +49,14 @@ export default function Header(props) {
 
   const seeChamaDetails = () => {
     navigation.navigate("Chama Details");
+  };
+
+  const renderChamaMembers = ({ item }) => {
+    return (
+      <View style={styles.chamaMember}>
+        <Text style={styles.chamaMemberText}>{item}</Text>
+      </View>
+    );
   };
 
   return (
@@ -41,6 +72,7 @@ export default function Header(props) {
         onPress={seeChamaDetails}
       >
         <Text style={styles.headerText}>{props.chamaName}</Text>
+        <Text style={styles.chamaMembers}>You, </Text>
       </TouchableOpacity>
 
       <HeaderRight />
@@ -70,7 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 40 / 2,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "gray",
   },
 
   headerText: {
@@ -82,10 +113,12 @@ const styles = StyleSheet.create({
 
   headerTouchableForDetails: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
     marginLeft: 20,
+  },
+
+  chamaMembers: {
+    fontSize: 12,
+    marginHorizontal: 16,
   },
 
   modalBody: {

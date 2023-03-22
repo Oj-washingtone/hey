@@ -72,7 +72,7 @@ export default function LoginScreen({ navigation }) {
       )}
       <TextInput
         style={styles.inputField}
-        placeholder="Phone number"
+        placeholder="Email address"
         cursorColor="gray"
         onChangeText={(text) => setCredentials({ ...credentils, email: text })}
       />

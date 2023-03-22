@@ -3,6 +3,7 @@ import {
   collection,
   where,
   query,
+  onSnapshot,
   doc,
   getDoc,
   getDocs,
@@ -36,23 +37,18 @@ export default function ChamaList(props) {
 
   // load chamas from firestore where this user is a chamaMember
   useEffect(() => {
-    const getChamaRooms = async (userId) => {
-      try {
-        const q = query(
-          collection(db, "chamas"),
-          where("chamaMembers", "array-contains", userId)
-        );
-        const querySnapshot = await getDocs(q);
-        const chamaRooms = [];
-        querySnapshot.forEach((doc) => {
-          chamaRooms.push(doc.data());
-        });
-        setChamaRooms(chamaRooms);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getChamaRooms(userId);
+    const q = query(
+      collection(db, "chamas"),
+      where("chamaMembers", "array-contains", userId)
+    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const chamaRooms = [];
+      querySnapshot.forEach((doc) => {
+        chamaRooms.push(doc.data());
+      });
+      setChamaRooms(chamaRooms);
+    });
+    return () => unsubscribe();
   }, [userId]);
 
   const openChama = (chamaDetails) => {

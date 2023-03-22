@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 
 import { db } from "../config/firebase";
@@ -82,7 +83,7 @@ export default function StartChamaScreen({ navigation, route }) {
         // messages within the space
         messages: [
           {
-            message: `Welcome to ${chamaCreated.chamaName}`,
+            message: `Welcome to ${chamaDetails.chamaName}`,
             type: "normal",
             senderID: "ChamaSmart",
             senderName: "Chama Smart",
@@ -146,6 +147,8 @@ export default function StartChamaScreen({ navigation, route }) {
       chamaDetails: chamaDetails,
       userId: userId,
       userName: userName,
+      chamaName: chamaDetails.chamaName,
+      chamaCode: chamaDetails.chamaCode,
     });
   };
 
