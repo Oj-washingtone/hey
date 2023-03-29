@@ -10,7 +10,7 @@ import {
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function DepositToWallet() {
+export default function DepositToWallet(zzz) {
   const [amount, setAmount] = useState(null);
   const [loading, setLoading] = useState(false);
 

@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingHorizontal: 20,
     marginVertical: 5,
-    maxWidth: "70%",
+    maxWidth: "80%",
     borderTopLeftRadius: 0,
     elevation: 3,
     alignSelf: "flex-start",

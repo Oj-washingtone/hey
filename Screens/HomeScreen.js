@@ -49,6 +49,8 @@ export default function HomeScreen({ navigation }) {
     phoneNumber: "",
   });
 
+  const [isOnline, setIsOnline] = useState(false);
+
   // get details of this user from firestore
   useEffect(() => {
     const getUserDetails = async (userId) => {
@@ -57,11 +59,13 @@ export default function HomeScreen({ navigation }) {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
+          setIsOnline(true);
           setUserDetails(docSnap.data());
         } else {
           console.log("No such document!");
         }
       } catch (error) {
+        setIsOnline(false);
         console.log(error);
       }
     };
@@ -88,13 +92,45 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("Chama", { chamaDetails: chamaDetails });
   };
 
+  // Navigate to deposit screen
+  const handleDeposit = () => {
+    navigation.navigate("Deposit", { userId: userId });
+  };
+
+  // navigate to withdrawals screen
+  const handleWithdraw = () => {
+    navigation.navigate("Withdraw", { userId: userId });
+  };
+
   return (
     //
     <View style={styles.container}>
       <StatusBar style="auto" />
       {userDetails.fullName ? (
         <View style={styles.body}>
-          <Wallet />
+          <Wallet fullName={userDetails.fullName} userId={userId} />
+          <View style={styles.walletActions}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              activeOpacity={0.5}
+              onPress={handleDeposit}
+            >
+              <Ioicons name="add" size={24} color="#000" />
+              <Text>Deposit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              activeOpacity={0.5}
+              onPress={handleWithdraw}
+            >
+              <Ioicons name="download" size={24} color="#000" />
+              <Text>Withdraw</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton} activeOpacity={0.5}>
+              <Ioicons name="calendar" size={24} color="#000" />
+              <Text>Schedule payments</Text>
+            </TouchableOpacity>
+          </View>
           <ChamaList
             navigate={navigation}
             handleOpenChama={openChama}
@@ -128,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "100%",
     alignItems: "center",
+    // backgroundColor: "#ed4746",
   },
 
   top: {
@@ -168,6 +205,25 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 60 / 2,
+  },
+
+  walletActions: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: screenWidth - 40,
+    marginTop: 40,
+  },
+
+  actionButton: {
+    width: 80,
+    height: 80,
+    // padding: 20,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 3,
   },
 
   floatingActionButton: {

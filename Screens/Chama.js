@@ -89,6 +89,7 @@ export default function Chama({ navigation, route }) {
       <Header
         chamaName={chamaDetails.chamaName}
         chamaCode={chamaDetails.chamaCode}
+        userId={userId}
       />
       <ImageBackground
         source={require("../assets/chat_bg.jpg")}

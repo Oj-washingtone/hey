@@ -33,14 +33,57 @@ export default function Header(props) {
 
   const chamaName = props.chamaName;
   const chamaCode = props.chamaCode;
-
-  console.log("Chama name: ", chamaName);
-  console.log("Chama code: ", chamaCode);
+  const userId = props.userId;
 
   const [showMenu, setShowMenu] = useState(false);
-  const [chamaMembers, setChamaMembers] = useState([]);
+  const [chamaMembersIds, setChamaMembersIds] = useState([]);
+  const [chamaMembersDetails, setChamaMembersDetails] = useState([]);
+  const [names, setNames] = useState([]);
 
   // get all members from chama mambers array in chamas collection
+
+  const getChamaMembers = async () => {
+    const q = query(
+      collection(db, "chamas"),
+      where("chamaCode", "==", chamaCode)
+    );
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      setChamaMembersIds(doc.data().chamaMembers);
+    });
+  };
+
+  useEffect(() => {
+    getChamaMembers();
+  }, [chamaCode]);
+
+  // get details of each member from users collection from their ids in chama members array
+  const getChamaMembersNames = async () => {
+    const chamaMembersNames = [];
+
+    for (let i = 0; i < chamaMembersIds.length; i++) {
+      try {
+        if (chamaMembersIds[i] !== userId) {
+          const docRef = doc(db, "users", chamaMembersIds[i]);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            chamaMembersNames.push(docSnap.data().fullName);
+          } else {
+            console.log("No such document!");
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    setNames(chamaMembersNames);
+  };
+
+  useEffect(() => {
+    getChamaMembersNames();
+  }, [chamaMembersIds]);
 
   const handleMenuPress = () => {
     setShowMenu(!showMenu);
@@ -49,14 +92,6 @@ export default function Header(props) {
 
   const seeChamaDetails = () => {
     navigation.navigate("Chama Details");
-  };
-
-  const renderChamaMembers = ({ item }) => {
-    return (
-      <View style={styles.chamaMember}>
-        <Text style={styles.chamaMemberText}>{item}</Text>
-      </View>
-    );
   };
 
   return (
@@ -72,7 +107,23 @@ export default function Header(props) {
         onPress={seeChamaDetails}
       >
         <Text style={styles.headerText}>{props.chamaName}</Text>
-        <Text style={styles.chamaMembers}>You, </Text>
+        {/* Render the names of chama members from chama members list */}
+        <View
+          style={styles.chamaMembersWrapper}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          <Text
+            style={styles.chamaMembers}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            You,{" "}
+            {names.map((name, index) => {
+              return <Text key={index}>{name}, </Text>;
+            })}
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <HeaderRight />
@@ -116,11 +167,15 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 
+  chamaMembersWrapper: {
+    width: "100%",
+    flexDirection: "row",
+  },
   chamaMembers: {
+    width: "100%",
     fontSize: 12,
     marginHorizontal: 16,
   },
-
   modalBody: {
     flex: 1,
   },

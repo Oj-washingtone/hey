@@ -1,3 +1,16 @@
+import { db } from "../../config/firebase";
+import {
+  collection,
+  where,
+  query,
+  onSnapshot,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  get,
+} from "firebase/firestore";
+
 import { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -7,8 +20,12 @@ import {
   ImageBackground,
 } from "react-native";
 import Ioicons from "react-native-vector-icons/Ionicons";
+import CircularPicker from "react-native-circular-picker";
+import CryptoJS from "react-native-crypto-js";
 
-export default function Wallet() {
+export default function Wallet(props) {
+  const userId = props?.userId;
+  const fullName = props?.fullName;
   const [seeBalance, setSeeBalance] = useState({
     visible: false,
     walletSize: 100,
@@ -33,51 +50,65 @@ export default function Wallet() {
     }
   };
 
+  // get wallet property of this user from firestore, decrypt it and access the ammount
+  useEffect(() => {
+    const fetchWallet = async () => {
+      try {
+        const userRef = doc(db, "users", userId);
+        const docSnapshot = await getDoc(userRef);
+
+        if (docSnapshot.exists()) {
+          const { wallet } = docSnapshot.data();
+
+          // Step 1: Decrypt the encrypted wallet
+          const decryptedWalletString = CryptoJS.AES.decrypt(
+            wallet,
+            userId
+          ).toString(CryptoJS.enc.Utf8);
+
+          // Step 2: Parse the decrypted JSON string
+          const decryptedWallet = JSON.parse(decryptedWalletString);
+
+          // Step 3: Access the balance property of the decrypted wallet
+          const { balance } = decryptedWallet;
+
+          setBalance(balance);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchWallet();
+  }, [userId]);
+
   return (
-    <ImageBackground
-      source={require("../../assets/wallet_bg.jpg")}
-      style={[styles.wallet, { height: seeBalance.walletSize }]}
-    >
-      <View style={[styles.walletHeader]}>
-        <Text style={styles.walletTitle}>Your wallet balance</Text>
-        {/* Eye icon to allow users to show hide their wallet balance */}
-        {seeBalance.visible ? (
-          <TouchableOpacity
-            style={styles.toggleSeeWallet}
-            onPress={toggleSeeBalance}
-          >
-            <Ioicons name="eye" size={26} color="#000" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.toggleSeeWallet}
-            onPress={toggleSeeBalance}
-          >
-            <Ioicons name="eye-off" size={26} color="#000" />
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {/* Show balance only when visible is true */}
-      {seeBalance.visible && (
-        <View style={styles.walletBalance}>
-          <Text style={styles.walletBallanceTitle}>KES</Text>
-          <Text style={styles.walletAmount}>0.00</Text>
-        </View>
-      )}
-
-      <View style={styles.walletNumberWrapper}>
-        {/* wallet icon */}
-        <Ioicons name="wallet" size={18} color="#D03F9B" />
-        <Text style={styles.walletNumber}>0811232314</Text>
-      </View>
-    </ImageBackground>
+    <View>
+      <CircularPicker
+        size={300}
+        steps={[15, 40, 70, 100]}
+        gradients={{
+          0: ["rgb(52, 199, 89)", "rgb(48, 209, 88)"],
+          15: ["rgb(52, 199, 89)", "rgb(48, 209, 88)"],
+          40: ["rgb(52, 199, 89)", "rgb(48, 209, 88)"],
+          70: ["rgb(52, 199, 89)", "rgb(48, 209, 88)"],
+        }}
+        // onChange={handleAmountChange}
+      >
+        <>
+          <Text style={{ textAlign: "center" }}>Available wallet balance</Text>
+          <Text style={{ textAlign: "center", fontSize: 24, marginBottom: 8 }}>
+            {balance} KES
+          </Text>
+        </>
+      </CircularPicker>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   wallet: {
-    backgroundColor: "#fff",
+    backgroundColor: "#217ffb",
     borderRadius: 10,
     marginTop: 50,
     padding: 20,
@@ -96,7 +127,7 @@ const styles = StyleSheet.create({
   walletTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#E83672",
+    color: "#fff",
     display: "flex",
     flexDirection: "row",
   },
@@ -123,10 +154,10 @@ const styles = StyleSheet.create({
   },
 
   walletNumber: {
-    color: "#E83672",
+    color: "#fff",
     fontSize: 15,
     fontWeight: "bold",
-    letterSpacing: 17,
+    // letterSpacing: 15,
     marginLeft: 10,
   },
 

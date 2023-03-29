@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Share } from "react-native";
+import { getRandomBytes } from "react-native-get-random-values";
+import CryptoJS from "react-native-crypto-js";
 
 import {
   View,
@@ -67,6 +69,25 @@ export default function StartChamaScreen({ navigation, route }) {
       chamaWallet: chamaWallet,
     });
 
+    const wallet = {
+      id: chamaWallet,
+      type: "group",
+      currency: "KES",
+      balance: 0,
+      transactions: [],
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      status: "active",
+    };
+
+    // ecrypt wallet
+    const walletString = CryptoJS.AES.encrypt(
+      JSON.stringify(wallet),
+      chamaDetails.chamaPassword
+    ).toString();
+
+    // console.log(walletString);
+
     // create chama on firestore
     try {
       setLoading(true);
@@ -123,6 +144,7 @@ export default function StartChamaScreen({ navigation, route }) {
         ],
         // members on waiting list to join this chama
         memberWaitList: [],
+        wallet: walletString,
       });
 
       setLoading(false);

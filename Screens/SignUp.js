@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 
+import CryptoJS from "react-native-crypto-js";
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from "../config/firebase";
 import { doc, setDoc } from "firebase/firestore";
@@ -105,6 +107,33 @@ export default function SignUpScreen({ navigation }) {
         // get id of added user
         const userId = addUser.user.uid;
 
+        // generate account number for user
+        const accountNumber = Math.floor(
+          1000000000 + Math.random() * 9000000000
+        );
+
+        // create wallet for user
+        const wallet = {
+          id: accountNumber,
+          type: "personal",
+          currency: "KES",
+          balance: 0,
+          transactions: [],
+          createdDate: new Date(),
+          modifiedDate: new Date(),
+          status: "active",
+          accountNumber: accountNumber,
+        };
+
+        // ecrypt wallet
+
+        const encryptedWallet = CryptoJS.AES.encrypt(
+          JSON.stringify(wallet),
+          userId
+        ).toString();
+
+        // console.log(encryptedWallet);
+
         // save user details to firestore
         try {
           const userRef = await doc(db, "users", userId);
@@ -116,6 +145,7 @@ export default function SignUpScreen({ navigation }) {
             email: credentials.email,
             hasChama: false,
             profilePicture: "",
+            wallet: encryptedWallet,
           });
         } catch {
           setCredentials({
@@ -127,11 +157,19 @@ export default function SignUpScreen({ navigation }) {
 
       // navigate to login screen
       navigation.navigate("Login");
-    } catch {
-      setCredentials({
-        ...credentials,
-        error: "Invalid credentials",
-      });
+    } catch (error) {
+      setLoading(false);
+      if (error.code === "auth/email-already-in-use") {
+        setCredentials({
+          ...credentials,
+          error: "Email already taken, please use another email",
+        });
+      } else {
+        setCredentials({
+          ...credentials,
+          error: "Error creating user, please try again later",
+        });
+      }
     }
   };
 
