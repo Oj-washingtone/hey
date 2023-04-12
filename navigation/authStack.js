@@ -25,12 +25,18 @@ export default function AuthStack() {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: "",
+            headerTitleStyle: { display: "none" },
+          }}
         />
         <Stack.Screen
           name="Sign up"
           component={SignUpScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: "",
+            headerTitleStyle: { display: "none" },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

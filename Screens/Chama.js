@@ -106,7 +106,10 @@ export default function Chama({ navigation, route }) {
         <View style={styles.moreActionsWrapper}>
           {visibleModal === "deposit" && (
             <View>
-              <ChamaDepositForm chamaCode={chamaDetails} />
+              <ChamaDepositForm
+                chamaCode={chamaDetails.chamaCode}
+                userId={userId}
+              />
             </View>
           )}
           {visibleModal === "attachment" && (

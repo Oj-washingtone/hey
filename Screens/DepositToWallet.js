@@ -1,4 +1,7 @@
-import { useState, useRef } from "react";
+import { db } from "../config/firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+
+import { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,34 +12,96 @@ import {
 } from "react-native";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import CryptoJS from "react-native-crypto-js";
 
-export default function DepositToWallet(zzz) {
+import { useAuthentication } from "../utils/hooks/useAuthentication";
+import { getAuth, getIdToken, signOut } from "firebase/auth";
+
+// import use navigation hook
+import { useNavigation } from "@react-navigation/native";
+
+export default function DepositToWallet(props) {
+  const navigation = useNavigation();
+
+  const user = useAuthentication();
+  const auth = getAuth();
+
+  const userId = user?.uid;
+
   const [amount, setAmount] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const sendMpesaRequest = () => {
+  const sendMpesaRequest = async () => {
+    // is the amount field empty?
+    if (amount === null) {
+      alert("Please fill in an amount to deposit");
+      return;
+    }
     setLoading(true);
-    // send request to server
-    // setLoading(false);
+
+    const userRef = doc(db, "users", userId);
+
+    // Retrieve the encrypted wallet from Firestore
+    const userDoc = await getDoc(userRef);
+    const { wallet } = userDoc.data();
+    // Decrypt the encrypted wallet
+    const decryptedWalletString = CryptoJS.AES.decrypt(wallet, userId).toString(
+      CryptoJS.enc.Utf8
+    );
+
+    // Parse the decrypted JSON string
+    const decryptedWallet = JSON.parse(decryptedWalletString);
+
+    //  Update the balance property in the decrypted wallet
+    let currentBalance = parseFloat(decryptedWallet.balance);
+    decryptedWallet.balance = currentBalance + parseFloat(amount);
+
+    //  Convert the updated wallet to a JSON string
+    const updatedWalletString = JSON.stringify(decryptedWallet);
+
+    //  Encrypt the updated wallet
+    const encryptedWallet = CryptoJS.AES.encrypt(
+      updatedWalletString,
+      userId
+    ).toString();
+
+    //  Update the `wallet` property in Firestore with the new encrypted wallet value
+    await updateDoc(userRef, {
+      wallet: encryptedWallet,
+    });
+
+    // clear the input field
+    setAmount(null);
+    setSuccess(true);
+    setLoading(false);
+
+    setTimeout(() => {
+      navigation.navigate("Home");
+    }, 1000);
   };
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.text}>DepositToWallet</Text> */}
       <View style={styles.depositAmountSection}>
-        <Text style={styles.quiz}>
-          How much would you wish to deposit to your wallet ?
-        </Text>
         <TextInput
           style={styles.input}
           keyboardType={"number-pad"}
           autoFocus={true}
           cursorColor={"#bd0832"}
-          placeholder="0.00"
+          placeholder="Amount"
           onChangeText={(amount) => setAmount(amount)}
         >
           {amount}
         </TextInput>
+        {/* show success message if successful deposit  */}
+        {success && (
+          <Text style={{ color: "#30d166", fontWeight: "bold", marginTop: 10 }}>
+            Deposit successful
+            {/* Check icon */}
+            <MaterialCommunityIcons name="check" color="#30d166" size={20} />
+          </Text>
+        )}
       </View>
 
       <TouchableOpacity
@@ -80,7 +145,7 @@ const styles = StyleSheet.create({
 
   input: {
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 15,
     borderWidth: 1,
     borderTopWidth: 0,
     borderRightWidth: 0,

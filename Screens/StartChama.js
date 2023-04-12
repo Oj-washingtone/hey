@@ -78,15 +78,20 @@ export default function StartChamaScreen({ navigation, route }) {
       createdDate: new Date(),
       modifiedDate: new Date(),
       status: "active",
+      fundsAllocation: [],
     };
 
     // ecrypt wallet
-    const walletString = CryptoJS.AES.encrypt(
+    const encryptedWallet = CryptoJS.AES.encrypt(
       JSON.stringify(wallet),
-      chamaDetails.chamaPassword
+      chamaCode.toString()
     ).toString();
 
-    // console.log(walletString);
+    console.log("walletString", encryptedWallet);
+    console.log("wallet", chamaCode);
+
+    // generate random color for chama
+    const h = Math.floor(Math.random() * 360);
 
     // create chama on firestore
     try {
@@ -97,7 +102,6 @@ export default function StartChamaScreen({ navigation, route }) {
         chamaDescription: chamaDetails.chamaDescription,
         chamaCode: chamaCode,
         chamaPassword: chamaPassword,
-        chamaWallet: chamaWallet,
         chamaMembers: [userId],
         chamaDP: "",
         chamaAdmins: [userId],
@@ -144,7 +148,10 @@ export default function StartChamaScreen({ navigation, route }) {
         ],
         // members on waiting list to join this chama
         memberWaitList: [],
-        wallet: walletString,
+        chamaWallet: wallet,
+        chamaRules: [],
+        chamaCreatedDate: new Date(),
+        chamaColor: `hsl(${h}deg, 90%, 85%)`,
       });
 
       setLoading(false);

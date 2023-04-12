@@ -109,8 +109,28 @@ export default function HomeScreen({ navigation }) {
       <StatusBar style="auto" />
       {userDetails.fullName ? (
         <View style={styles.body}>
-          <View style={styles.header}>
-            <Text style={styles.title}>My chamas</Text>
+          <Wallet fullName={userDetails.fullName} userId={userId} />
+          <View style={styles.walletActions}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              activeOpacity={0.5}
+              onPress={handleDeposit}
+            >
+              <Ioicons name="add" size={24} color="#000" />
+              <Text>Deposit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              activeOpacity={0.5}
+              onPress={handleWithdraw}
+            >
+              <Ioicons name="download" size={24} color="#000" />
+              <Text>Withdraw</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton} activeOpacity={0.5}>
+              <Ioicons name="calendar" size={24} color="#000" />
+              <Text>Schedule payments</Text>
+            </TouchableOpacity>
           </View>
           <ChamaList
             navigate={navigation}
@@ -138,26 +158,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    paddingTop: 50,
   },
 
   body: {
     flex: 1,
+    backgroundColor: "#fff",
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
     alignItems: "center",
     // backgroundColor: "#ed4746",
   },
 
-  header: {
-    width: "90%",
-    marginVertical: 20,
-  },
+  top: {
+    height: 200,
+    backgroundColor: "#ED4746",
+    borderBottomLeftRadius: -40,
+    borderBottomRightRadius: -40,
 
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
+    // padding to make the content below the notch
+    paddingTop: 50,
   },
 
   welcome: {

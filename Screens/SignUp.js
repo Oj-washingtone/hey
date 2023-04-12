@@ -8,8 +8,12 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Image,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import CryptoJS from "react-native-crypto-js";
 
@@ -32,12 +36,14 @@ export default function SignUpScreen({ navigation }) {
     error: "",
   });
 
+  const [passwordHidden, setPasswordHidden] = useState(true);
+
   const CreateUser = async () => {
-    // setLoading(true);
+    Keyboard.dismiss();
+
     // check for empty values
     if (
       credentials.fullName === "" ||
-      credentials.idNumber === "" ||
       credentials.email === "" ||
       credentials.phoneNumber === "" ||
       credentials.password === "" ||
@@ -162,7 +168,7 @@ export default function SignUpScreen({ navigation }) {
       if (error.code === "auth/email-already-in-use") {
         setCredentials({
           ...credentials,
-          error: "Email already taken, please use another email",
+          error: "Email is already taken, please use another email or login",
         });
       } else {
         setCredentials({
@@ -173,13 +179,15 @@ export default function SignUpScreen({ navigation }) {
     }
   };
 
+  const showPassword = () => {
+    setPasswordHidden(!passwordHidden);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.logo}>
-        <Text style={[styles.logoText]}>Chama</Text>
-        <Text style={[styles.logoText, styles.logoText2]}>Smart</Text>
-      </View>
+
+      <Text style={styles.signUpText}>Sign Up</Text>
 
       {!!credentials.error && (
         <View style={styles.error}>
@@ -187,96 +195,193 @@ export default function SignUpScreen({ navigation }) {
         </View>
       )}
 
-      <TextInput
-        style={styles.inputField}
-        placeholder="Full name"
-        cursorColor="gray"
-        value={credentials.fullName}
-        onChangeText={(text) =>
-          setCredentials({ ...credentials, fullName: text })
-        }
-        // leftIcon={<Ionicons name="person" size={24} color="black" />}
-      />
-      <TextInput
-        style={styles.inputField}
-        placeholder="ID number or passport"
-        cursorColor="gray"
-        value={credentials.idNumber}
-        onChangeText={(number) =>
-          setCredentials({ ...credentials, idNumber: number })
-        }
-        keyboardType="numeric"
-      />
+      <View style={styles.formWrapper}>
+        <View style={styles.inputWrapper}>
+          <MaterialCommunityIcons
+            name="account-outline"
+            size={24}
+            color="gray"
+            style={styles.inputIcon}
+          />
 
-      <TextInput
-        style={styles.inputField}
-        placeholder="Email address"
-        cursorColor="gray"
-        value={credentials.email}
-        onChangeText={(text) => setCredentials({ ...credentials, email: text })}
-      />
+          <TextInput
+            style={styles.inputField}
+            placeholder="Full name"
+            cursorColor="gray"
+            value={credentials.fullName}
+            onChangeText={(text) =>
+              setCredentials({ ...credentials, fullName: text })
+            }
+            onSubmitEditing={Keyboard.dismiss}
+            onFocus={() => setCredentials({ ...credentials, error: "" })}
+          />
+        </View>
 
-      <TextInput
-        style={styles.inputField}
-        placeholder="Phone number"
-        cursorColor="gray"
-        value={credentials.phoneNumber}
-        keyboardType="numeric"
-        onChangeText={(number) =>
-          setCredentials({ ...credentials, phoneNumber: number })
-        }
-      />
-      <TextInput
-        style={styles.inputField}
-        placeholder="Password"
-        secureTextEntry
-        cursorColor="gray"
-        value={credentials.password}
-        onChangeText={(text) =>
-          setCredentials({ ...credentials, password: text })
-        }
-      />
+        <View style={styles.inputWrapper}>
+          <MaterialCommunityIcons
+            name="email-outline"
+            size={24}
+            color="gray"
+            style={styles.inputIcon}
+          />
 
-      <TextInput
-        style={styles.inputField}
-        placeholder="Confirm password"
-        secureTextEntry
-        cursorColor="gray"
-        value={credentials.confirmPassword}
-        onChangeText={(text) =>
-          setCredentials({ ...credentials, confirmPassword: text })
-        }
-      />
+          <TextInput
+            style={styles.inputField}
+            placeholder="Email address"
+            cursorColor="gray"
+            value={credentials.email}
+            onChangeText={(text) =>
+              setCredentials({ ...credentials, email: text })
+            }
+            onSubmitEditing={Keyboard.dismiss}
+            onFocus={() => setCredentials({ ...credentials, error: "" })}
+          />
+        </View>
 
-      <View style={styles.termsCaution}>
-        <Text>
-          By registering, you agree to the terms and conditions of service
-        </Text>
-        <TouchableOpacity>
-          <Text style={styles.termsLink}>terms and conditions of service</Text>
+        <View style={styles.inputWrapper}>
+          <MaterialCommunityIcons
+            name="phone-outline"
+            size={24}
+            color="gray"
+            style={styles.inputIcon}
+          />
+
+          <TextInput
+            style={styles.inputField}
+            placeholder="Mobile"
+            cursorColor="gray"
+            value={credentials.phoneNumber}
+            keyboardType="numeric"
+            onChangeText={(number) =>
+              setCredentials({ ...credentials, phoneNumber: number })
+            }
+            onSubmitEditing={Keyboard.dismiss}
+            onFocus={() => setCredentials({ ...credentials, error: "" })}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <MaterialCommunityIcons
+            name="lock-outline"
+            size={24}
+            color="gray"
+            style={styles.inputIcon}
+          />
+
+          <TextInput
+            style={styles.inputField}
+            placeholder="Password"
+            secureTextEntry={passwordHidden}
+            cursorColor="gray"
+            value={credentials.password}
+            onChangeText={(text) =>
+              setCredentials({ ...credentials, password: text })
+            }
+            onSubmitEditing={Keyboard.dismiss}
+            onFocus={() => setCredentials({ ...credentials, error: "" })}
+          />
+
+          <TouchableOpacity
+            style={styles.passwordVisibility}
+            onPress={showPassword}
+          >
+            {passwordHidden ? (
+              <MaterialCommunityIcons
+                name="eye-off"
+                size={24}
+                color="gray"
+                style={styles.inputIcon}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="eye"
+                size={24}
+                color="gray"
+                style={styles.inputIcon}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <MaterialCommunityIcons
+            name="lock-outline"
+            size={24}
+            color="gray"
+            style={styles.inputIcon}
+          />
+
+          <TextInput
+            style={styles.inputField}
+            placeholder="Confirm password"
+            secureTextEntry
+            cursorColor="gray"
+            value={credentials.confirmPassword}
+            onChangeText={(text) =>
+              setCredentials({ ...credentials, confirmPassword: text })
+            }
+            onSubmitEditing={Keyboard.dismiss}
+            onFocus={() => setCredentials({ ...credentials, error: "" })}
+          />
+        </View>
+
+        <View style={styles.termsCaution}>
+          <Text>
+            By registering, you agree to the terms and conditions of service
+          </Text>
+          <TouchableOpacity>
+            <Text style={styles.termsLink}>
+              terms and conditions of service
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Login Btn */}
+        <TouchableOpacity
+          style={styles.loginBtn}
+          activeOpacity={0.5}
+          onPress={CreateUser}
+        >
+          <LinearGradient
+            colors={["#ed4746", "#A353BB"]}
+            start={[0.1, 0.1]}
+            end={[1, 1]}
+            style={styles.btnBackground}
+          >
+            {loading && <ActivityIndicator size="small" color="#fff" />}
+            <Text style={styles.loginBtnText}>
+              {loading ? "Please wait ..." : "Sign up"}
+            </Text>
+          </LinearGradient>
         </TouchableOpacity>
+
+        {/* Or login with google */}
+        <View style={styles.withGoogleWrapper}>
+          <View style={styles.orWrapper}>
+            <View style={styles.orLine}></View>
+            <Text style={styles.orText}>Or</Text>
+            <View style={styles.orLine}></View>
+          </View>
+
+          <TouchableOpacity style={styles.googleBtn}>
+            {/* Image og google from the assets folder */}
+            <Image
+              source={require("./../assets/googleIcon.png")}
+              style={styles.googleBtnImage}
+            />
+            <Text style={styles.googleBtnText}>Sign up with Google</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Sign up Btn */}
-      <TouchableOpacity
-        style={styles.registerBtn}
-        activeOpacity={0.5}
-        onPress={CreateUser}
-      >
-        {loading && <ActivityIndicator size="small" color="#fff" />}
-        <Text style={styles.signupBtnText}>
-          {loading ? "Creating account..." : "Sign up"}
-        </Text>
-      </TouchableOpacity>
       <View style={styles.promptLogin}>
-        <Text style={styles.promptLoginText}>Already have an account?</Text>
+        <Text style={styles.promptLoginText}>Have an account?</Text>
         <TouchableOpacity
           style={styles.loginRedirect}
           onPress={() => {
             navigation.navigate("Login");
           }}
         >
-          <Text style={styles.loginRedirectText}>Login</Text>
+          <Text style={styles.loginRedirectText}>login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -287,57 +392,133 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 50,
   },
 
-  logo: {
+  signUpArt: {
+    width: "100%",
+    height: "30%",
+    resizeMode: "contain",
+  },
+
+  signUpText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#000",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+
+  formWrapper: {
+    width: "100%",
+    marginTop: 20,
+  },
+
+  inputWrapper: {
     display: "flex",
     flexDirection: "row",
-    marginBottom: 60,
-  },
-
-  logoText: {
-    fontSize: 25,
-    fontWeight: "bold",
-  },
-
-  logoText2: {
-    color: "#ed4746",
+    alignItems: "center",
+    width: "100%",
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 10,
+    marginVertical: 10,
   },
 
   inputField: {
     width: "80%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 5,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    margin: 10,
+    marginLeft: 20,
   },
 
-  registerBtn: {
+  btn: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  btnBackground: {
+    width: "100%",
+    padding: 10,
+    alignItems: "center",
+    borderRadius: 5,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    width: "80%",
-    borderRadius: 20,
-    backgroundColor: "#ed4746",
-    padding: 7,
+  },
+
+  btnText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  withGoogleWrapper: {
+    width: "100%",
+    marginTop: 20,
+  },
+
+  orWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
+  },
+
+  orLine: {
+    width: "45%",
+    height: 1,
+    backgroundColor: "#ccc",
+  },
+
+  orText: {
+    marginHorizontal: 10,
+    color: "#ccc",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+
+  googleBtn: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: 20,
+    backgroundColor: "#f2f3f5",
+    padding: 10,
+    borderRadius: 5,
+  },
+
+  googleBtnImage: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain",
+    marginRight: 10,
+  },
+
+  loginBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
     marginTop: 20,
     alignItems: "center",
   },
-  signupBtnText: {
+  loginBtnText: {
     color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 16,
   },
 
   promptLogin: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 60,
+    marginVertical: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   promptLoginText: {
     fontSize: 15,
@@ -364,21 +545,9 @@ const styles = StyleSheet.create({
   },
 
   error: {
-    backgroundColor: "#f8d7da",
-    borderColor: "#f5c6cb",
-    borderWidth: 1,
-    padding: 5,
-    paddingHorizontal: 20,
-    width: "80%",
-    borderRadius: 20,
-    marginBottom: 10,
+    width: "100%",
   },
   errorMessage: {
-    color: "#721c24",
+    color: "red",
   },
 });
-
-/**
- * Kaimosi university
- * Denzel Mwiti should call me
- */

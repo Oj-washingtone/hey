@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  Image,
   Dimensions,
 } from "react-native";
 
@@ -64,7 +65,10 @@ export default function ChamaList(props) {
         {item.chamaDP ? (
           <Ioicons name="wallet" size={18} color="#D03F9B" />
         ) : (
-          <Ioicons name="people" size={28} color="#ccc" />
+          <Image
+            source={require("./../../assets/chamaDps/logo2.png")}
+            style={styles.chamaImage}
+          />
         )}
       </View>
 
@@ -83,11 +87,9 @@ export default function ChamaList(props) {
 
   return (
     <View style={styles.chamaList}>
-      <Text style={styles.title}>My chamas</Text>
-
       {/* Search input */}
       <View style={styles.searchInput}>
-        <Ioicons name="search" size={20} color="#006FCD" />
+        <Ioicons name="search" size={20} color="gray" />
         <TextInput
           cursorColor={"gray"}
           placeholder="Search chama"
@@ -108,6 +110,7 @@ const styles = StyleSheet.create({
   chamaSection: {
     flex: 2.3,
     marginTop: 50,
+    backgroundColor: "#fff",
   },
 
   title: {
@@ -118,7 +121,9 @@ const styles = StyleSheet.create({
   },
 
   chama: {
-    marginBottom: 20,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    marginBottom: 10,
     display: "flex",
     flexDirection: "row",
     paddingVertical: 10,
@@ -143,6 +148,7 @@ const styles = StyleSheet.create({
   },
 
   chamaDetails: {
+    backgroundColor: "#fff",
     width: screenWidth - 120,
   },
 
@@ -172,15 +178,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f2f3f5",
-    borderRadius: 30,
+    borderRadius: 5,
     padding: 10,
-    paddingVertical: 5,
-    marginBottom: 20,
+    marginBottom: 30,
+    // elevation: 3,
   },
 
   searchInputText: {
     marginLeft: 10,
-    width: "100%",
+    width: "90%",
   },
 
   messageAndCounterWraper: {
@@ -190,7 +196,7 @@ const styles = StyleSheet.create({
   },
 
   unreadMessageCounter: {
-    backgroundColor: "#006FCD",
+    backgroundColor: "#04c765",
     color: "#fff",
     borderRadius: 20,
     height: 15,
@@ -199,5 +205,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     paddingHorizontal: 5,
     fontWeight: "bold",
+  },
+
+  chamaImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    resizeMode: "cover",
   },
 });

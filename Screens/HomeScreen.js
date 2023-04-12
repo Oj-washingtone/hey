@@ -9,6 +9,8 @@ import {
   setDoc,
   get,
 } from "firebase/firestore";
+import { LinearGradient } from "expo-linear-gradient";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { StatusBar } from "expo-status-bar";
 import { useRef, useState, createContext, useEffect } from "react";
@@ -22,7 +24,6 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-// import { Swipeable } from "react-native-gesture-handler";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, getIdToken, signOut } from "firebase/auth";
@@ -107,41 +108,8 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       {userDetails.fullName ? (
-        <View style={styles.body}>
-          <Wallet fullName={userDetails.fullName} userId={userId} />
-          <View style={styles.walletActions}>
-            <TouchableOpacity
-              style={styles.actionButton}
-              activeOpacity={0.5}
-              onPress={handleDeposit}
-            >
-              <Ioicons name="add" size={24} color="#000" />
-              <Text>Deposit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.actionButton}
-              activeOpacity={0.5}
-              onPress={handleWithdraw}
-            >
-              <Ioicons name="download" size={24} color="#000" />
-              <Text>Withdraw</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton} activeOpacity={0.5}>
-              <Ioicons name="calendar" size={24} color="#000" />
-              <Text>Schedule payments</Text>
-            </TouchableOpacity>
-          </View>
-          <ChamaList
-            navigate={navigation}
-            handleOpenChama={openChama}
-            userId={userId}
-            userName={userDetails.fullName}
-          />
-          <FloatingActionButton
-            onJoinChamaPress={handleJoinChama}
-            onCreateChamaPress={handleStartChama}
-            userName={userDetails.fullName}
-          />
+        <View>
+          <Text>Dasboard</Text>
         </View>
       ) : (
         <ActivityIndicator size="large" color="#E83672" />
@@ -157,85 +125,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-  },
-
-  body: {
-    flex: 1,
-    backgroundColor: "#fff",
-    width: "100%",
-    alignItems: "center",
-    // backgroundColor: "#ed4746",
-  },
-
-  top: {
-    height: 200,
-    backgroundColor: "#ED4746",
-    borderBottomLeftRadius: -40,
-    borderBottomRightRadius: -40,
-
-    // padding to make the content below the notch
-    paddingTop: 50,
-  },
-
-  welcome: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "gray",
-    marginTop: 5,
-  },
-
-  nameUser: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-
-  profileImageSection: {
-    width: 50,
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 50 / 2,
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  profileImage: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 60 / 2,
-  },
-
-  walletActions: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    width: screenWidth - 40,
-    marginTop: 40,
-  },
-
-  actionButton: {
-    width: 80,
-    height: 80,
-    // padding: 20,
-    borderRadius: 10,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 3,
-  },
-
-  floatingActionButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    width: 55,
-    height: 55,
-    borderRadius: 55 / 2,
-    backgroundColor: "#bd0832",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 3,
   },
 });

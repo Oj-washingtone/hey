@@ -91,7 +91,8 @@ export default function Header(props) {
   };
 
   const seeChamaDetails = () => {
-    navigation.navigate("Chama Details");
+    console.log("See chama details " + chamaCode);
+    navigation.navigate("Chama Details", { chamaCode: chamaCode });
   };
 
   return (
