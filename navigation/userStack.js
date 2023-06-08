@@ -18,6 +18,10 @@ import JoinChamaScreen from "../Screens/JoinChama";
 import StartChamaScreen from "../Screens/StartChama";
 import EditProfile from "../Screens/EditProfile";
 import ChamaDetails from "../Screens/ChamaDetails";
+import ScheduleScreen from "../Screens/SchedulePayment";
+import AddScheduleForm from "../Screens/AddScheduleForm";
+import ChamaBasicRulesForm from "../Screens/ChamaBasicRules";
+import ChamaDetailsAnnouncement from "../Screens/ChamaDetailsAnnouncement";
 
 // Header right component
 import HeaderRight from "../Screens/myComponents/HeaderRight";
@@ -49,6 +53,27 @@ export default function UserStack() {
         <Stack.Screen name="Start Chama" component={StartChamaScreen} />
         <Stack.Screen name="Edit Profile" component={EditProfile} />
         <Stack.Screen name="Chama Details" component={ChamaDetails} />
+        <Stack.Screen name="Schedule Payment" component={ScheduleScreen} />
+        <Stack.Screen
+          name="Add Schedule Form"
+          component={AddScheduleForm}
+          options={{ headerTitle: "", headerTitleStyle: { display: "none" } }}
+        />
+        <Stack.Screen
+          name="Chama Basic Rules"
+          component={ChamaBasicRulesForm}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="Chama Details Announcement"
+          component={ChamaDetailsAnnouncement}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

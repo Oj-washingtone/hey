@@ -25,6 +25,7 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 import Ioicons from "react-native-vector-icons/Ionicons";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -60,15 +61,27 @@ export default function ChamaList(props) {
   };
 
   const renderChamaRooms = ({ item }) => (
-    <TouchableOpacity style={styles.chama} onPress={() => openChama(item)}>
-      <View style={styles.chamaDPsection}>
+    <TouchableOpacity
+      style={styles.chama}
+      onPress={() => openChama(item)}
+      activeOpacity={0.5}
+    >
+      <View
+        style={[styles.chamaDPsection, { backgroundColor: item.chamaColor }]}
+      >
+        {/* Check if chamadp is an empty string */}
         {item.chamaDP ? (
-          <Ioicons name="wallet" size={18} color="#D03F9B" />
-        ) : (
           <Image
-            source={require("./../../assets/chamaDps/logo2.png")}
-            style={styles.chamaImage}
+            source={{ uri: item.chamaDP }}
+            style={styles.chamaDP}
+            resizeMode="cover"
           />
+        ) : (
+          <View style={[styles.chamaDP, styles.noDp]}>
+            <Text style={styles.chamaDPText}>
+              {item.chamaName.charAt(0).toUpperCase()}
+            </Text>
+          </View>
         )}
       </View>
 
@@ -88,20 +101,44 @@ export default function ChamaList(props) {
   return (
     <View style={styles.chamaList}>
       {/* Search input */}
-      <View style={styles.searchInput}>
-        <Ioicons name="search" size={20} color="gray" />
-        <TextInput
-          cursorColor={"gray"}
-          placeholder="Search chama"
-          style={styles.searchInputText}
-        />
+      <View style={styles.chatTop}>
+        <View style={styles.searchInput}>
+          <Ioicons name="search" size={20} color="gray" />
+          <TextInput
+            cursorColor={"gray"}
+            placeholder="Search chama"
+            style={styles.searchInputText}
+          />
+        </View>
+
+        {/* Notification Button Icon */}
+        <TouchableOpacity style={styles.notificationButton}>
+          <Ioicons name="notifications-outline" size={25} color="gray" />
+        </TouchableOpacity>
       </View>
-      <FlatList
-        data={chamaRooms}
-        renderItem={renderChamaRooms}
-        keyExtractor={(item) => item.chamaCode.toString()}
-        showsVerticalScrollIndicator={false}
-      />
+
+      <Text style={styles.chamaListTitle}>My Chamas</Text>
+
+      {/* Only render list when it has content else say no content */}
+      {chamaRooms && chamaRooms.length > 0 ? (
+        <FlatList
+          data={chamaRooms}
+          renderItem={renderChamaRooms}
+          keyExtractor={(item) => item.chamaCode.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View style={styles.noContent}>
+          <MaterialCommunityIcons
+            name="account-group-outline"
+            size={50}
+            color="gray"
+          />
+          <Text style={styles.noContentText}>
+            Your chamas will appear here once you create or join one
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -132,10 +169,10 @@ const styles = StyleSheet.create({
   },
 
   chamaDPsection: {
+    display: "flex",
     width: 55,
     height: 55,
     borderRadius: 55 / 2,
-    backgroundColor: "#f2f3f5",
     borderColor: "#f2f3f5",
     justifyContent: "center",
     alignItems: "center",
@@ -177,16 +214,15 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f2f3f5",
-    borderRadius: 5,
+    backgroundColor: "#fff",
+    borderRadius: 20,
     padding: 10,
-    marginBottom: 30,
-    // elevation: 3,
+    elevation: 3,
   },
 
   searchInputText: {
     marginLeft: 10,
-    width: "90%",
+    width: "75%",
   },
 
   messageAndCounterWraper: {
@@ -212,5 +248,54 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 50 / 2,
     resizeMode: "cover",
+  },
+
+  chatTop: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 30,
+  },
+
+  notificationButton: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 3,
+  },
+
+  noContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  noContentText: {
+    color: "gray",
+    textAlign: "center",
+    marginTop: 10,
+  },
+
+  noDp: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  chamaDPText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+    textTransform: "uppercase",
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+
+  chamaListTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    // color: "gray",
+    marginBottom: 20,
   },
 });

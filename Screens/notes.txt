@@ -207,3 +207,68 @@
 
 #545454
 #5c5b5c
+
+
+
+
+{chamaCreated ? (
+        <View style={styles.chamaDetails}>
+          <MaterialCommunityIcons
+            name="party-popper"
+            size={64}
+            color="orange"
+          />
+
+          <Text style={styles.title}>Congratulations</Text>
+
+          <View style={styles.details}>
+            <Text style={[styles.title, { marginBottom: 20 }]}>
+              A Chama has been created for you with the following details
+            </Text>
+            <Text style={styles.title}>Chama Name:</Text>
+            <Text style={styles.detail}>{chamaDetails.chamaName}</Text>
+            <Text style={styles.title}>Description:</Text>
+            <Text style={styles.detail}>{chamaDetails.chamaDescription}</Text>
+            <Text style={styles.title}>Chama Code:</Text>
+            <Text style={styles.detail}>{chamaDetails.chamaCode}</Text>
+            <Text style={styles.title}> Password:</Text>
+            <Text style={styles.detail}>{chamaDetails.chamaPassword}</Text>
+            <Text style={styles.title}>Account number:</Text>
+            <Text style={styles.detail}>{chamaDetails.chamaWallet}</Text>
+
+            <Text>
+              Please note that members wishing joining this chama will need your
+              chama Code and password, note that these details important to your
+              chama and therefore should be kept secret to your members.
+            </Text>
+
+            <View style={styles.actionWrapper}>
+              <TouchableOpacity
+                style={[styles.btn, styles.btnInvite]}
+                activeOpacity={0.6}
+                onPress={shareInvite}
+              >
+                <MaterialCommunityIcons
+                  name="account-multiple-plus-outline"
+                  size={24}
+                  color="#000"
+                />
+                <Text style={styles.inviteTextBtn}>Invite members </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.btn]}
+                activeOpacity={0.6}
+                onPress={gotoChama}
+              >
+                <Text style={styles.actionsText}>Goto chama</Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={24}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      ) : (

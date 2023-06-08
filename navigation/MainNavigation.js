@@ -17,8 +17,8 @@ export default function MainNavigation() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "Home") {
-            iconName = focused ? "view-dashboard" : "view-dashboard-outline";
+          if (route.name === "Statistics") {
+            iconName = focused ? "chart-line" : "chart-line";
           } else if (route.name === "My Chamas") {
             iconName = focused
               ? "account-multiple"
@@ -45,22 +45,23 @@ export default function MainNavigation() {
       })}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Tab.Screen
         name="My Chamas"
         component={Chats}
         options={{ headerShown: false }}
       />
+
       <Tab.Screen
         name="Wallet"
         component={Wallet}
         options={{ headerShown: false }}
+      />
+
+      <Tab.Screen
+        name="Statistics"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Tab.Screen name="Account" component={UserAccount} />
     </Tab.Navigator>

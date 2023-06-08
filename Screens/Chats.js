@@ -110,8 +110,15 @@ export default function HomeScreen({ navigation }) {
       {userDetails.fullName ? (
         <View style={styles.body}>
           <View style={styles.header}>
-            <Text style={styles.title}>My chamas</Text>
+            <Text style={styles.title}>brighter</Text>
+            {/* Welcome message with name */}
+            <Text style={styles.welcome}>
+              Hello,{" "}
+              {userDetails.fullName.split(" ")[0].charAt(0).toUpperCase() +
+                userDetails.fullName.split(" ")[0].slice(1)}
+            </Text>
           </View>
+
           <ChamaList
             navigate={navigation}
             handleOpenChama={openChama}
@@ -220,5 +227,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     elevation: 3,
+  },
+
+  welcome: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "gray",
+    marginTop: 25,
   },
 });

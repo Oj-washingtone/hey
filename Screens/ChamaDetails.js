@@ -32,6 +32,7 @@ export default function ChamaDetails() {
   const chamaCode = route.params.chamaCode;
 
   const navigation = useNavigation();
+  const [chama_wallet, setChamaWallet] = useState(null);
 
   const [chamaWalletBalance, setChamaWalletBalance] = useState(null);
 
@@ -46,27 +47,32 @@ export default function ChamaDetails() {
         const data = doc.data();
 
         const { chamaWallet } = data;
-        console.log("wallet", chamaWallet);
+        // set state for wallet for chamas
 
-        try {
-          const decryptedWalletString = CryptoJS.AES.decrypt(
-            chamaWallet,
-            chamaCode.toString()
-          ).toString(CryptoJS.enc.Utf8);
-          const decryptedWallet = JSON.parse(decryptedWalletString);
-          setChamaWalletBalance(parseFloat(decryptedWallet.balance));
-        } catch (error) {
-          console.error("Error decrypting chama wallet", error);
-        }
+        setChamaWallet(chamaWallet);
+        console.log("wallet balance", chamaWallet.balance);
+
+        // try {
+        //   const decryptedWalletString = CryptoJS.AES.decrypt(
+        //     chamaWallet,
+        //     chamaCode.toString()
+        //   ).toString(CryptoJS.enc.Utf8);
+        //   const decryptedWallet = JSON.parse(decryptedWalletString);
+        //   setChamaWalletBalance(parseFloat(decryptedWallet.balance));
+        // } catch (error) {
+        //   console.error("Error decrypting chama wallet", error);
+        // }
       });
     });
 
     return unsubscribe;
   }, [chamaCode]);
 
+  console.log("chama wallet without decryption", chama_wallet);
+
   return (
     <View style={styles.container}>
-      <Text>Wllet balance is {chamaWalletBalance}</Text>
+      <Text>Wllet balance is </Text>
     </View>
   );
 }

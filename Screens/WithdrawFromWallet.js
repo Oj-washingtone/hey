@@ -11,7 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { LinearGradient } from "expo-linear-gradient";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 import CryptoJS from "react-native-crypto-js";
 import RadioGroup from "react-native-radio-buttons-group";
 
@@ -84,7 +85,7 @@ export default function WithdrawFromWallet(props) {
     setLoading(false);
 
     setTimeout(() => {
-      navigation.navigate("Home");
+      navigation.navigate("Wallet");
     }, 1000);
   };
 
@@ -147,8 +148,9 @@ export default function WithdrawFromWallet(props) {
             style={styles.input}
             autoFocus={true}
             cursorColor={"#bd0832"}
-            placeholder="phone number"
+            placeholder="phone number e.g 2547 *** ***"
             onChangeText={(amount) => setAmount(amount)}
+            keyboardType="number-pad"
           >
             {amount}
           </TextInput>
@@ -179,10 +181,17 @@ export default function WithdrawFromWallet(props) {
         activeOpacity={0.5}
         onPress={sendMpesaRequest}
       >
-        {loading && <ActivityIndicator size="small" color="#fff" />}
-        <Text style={styles.depositBtnText}>
-          {loading ? "Waiting for Mpesa  ..." : "Withdraw to Mpesa"}
-        </Text>
+        <LinearGradient
+          colors={["#ed4746", "#A353BB"]}
+          start={[0.1, 0.1]}
+          end={[1, 1]}
+          style={styles.btnBackground}
+        >
+          {loading && <ActivityIndicator size="small" color="#fff" />}
+          <Text style={styles.depositBtnText}>
+            {loading ? "Waiting for Mpesa  ..." : "Withdraw to Mpesa"}
+          </Text>
+        </LinearGradient>
       </TouchableOpacity>
     </View>
   );
@@ -229,11 +238,14 @@ const styles = StyleSheet.create({
   },
 
   depositBtn: {
-    backgroundColor: "#ed4746",
     width: "80%",
+  },
+
+  btnBackground: {
+    width: "100%",
     padding: 10,
     alignItems: "center",
-    borderRadius: 20,
+    borderRadius: 5,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",

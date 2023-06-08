@@ -11,8 +11,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { LinearGradient } from "expo-linear-gradient";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 import CryptoJS from "react-native-crypto-js";
+import RadioGroup from "react-native-radio-buttons-group";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
 import { getAuth, getIdToken, signOut } from "firebase/auth";
@@ -77,13 +79,40 @@ export default function DepositToWallet(props) {
     setLoading(false);
 
     setTimeout(() => {
-      navigation.navigate("Home");
+      navigation.navigate("Wallet");
     }, 1000);
   };
+
+  const [radioButton, setRadioButton] = useState([
+    {
+      id: "1",
+      label: "M~pesa",
+      value: "My number",
+      color: "#bd0832",
+      size: 20,
+      disabled: false,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      marginLeft: 10,
+      selected: true,
+    },
+  ]);
 
   return (
     <View style={styles.container}>
       <View style={styles.depositAmountSection}>
+        <RadioGroup
+          radioButtons={radioButton}
+          containerStyle={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            marginTop: 20,
+            with: "100%",
+            backgroundColor: "#f2f3f5",
+          }}
+        />
         <TextInput
           style={styles.input}
           keyboardType={"number-pad"}
@@ -109,10 +138,17 @@ export default function DepositToWallet(props) {
         activeOpacity={0.5}
         onPress={sendMpesaRequest}
       >
-        {loading && <ActivityIndicator size="small" color="#fff" />}
-        <Text style={styles.depositBtnText}>
-          {loading ? "Waiting for Mpesa  ..." : "Deposit from Mpesa"}
-        </Text>
+        <LinearGradient
+          colors={["#ed4746", "#A353BB"]}
+          start={[0.1, 0.1]}
+          end={[1, 1]}
+          style={styles.btnBackground}
+        >
+          {loading && <ActivityIndicator size="small" color="#fff" />}
+          <Text style={styles.depositBtnText}>
+            {loading ? "Waiting for Mpesa  ..." : "Deposit"}
+          </Text>
+        </LinearGradient>
       </TouchableOpacity>
     </View>
   );
@@ -157,15 +193,18 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 
-  depositBtn: {
-    backgroundColor: "#ed4746",
-    width: "80%",
+  btnBackground: {
+    width: "100%",
     padding: 10,
+    borderRadius: 5,
     alignItems: "center",
-    borderRadius: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
+  },
+
+  depositBtn: {
+    width: "80%",
   },
 
   depositBtnText: {

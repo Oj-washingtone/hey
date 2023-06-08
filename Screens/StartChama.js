@@ -82,16 +82,48 @@ export default function StartChamaScreen({ navigation, route }) {
     };
 
     // ecrypt wallet
-    const encryptedWallet = CryptoJS.AES.encrypt(
-      JSON.stringify(wallet),
-      chamaCode.toString()
-    ).toString();
+    // const encryptedWallet = CryptoJS.AES.encrypt(
+    //   JSON.stringify(wallet),
+    //   chamaCode.toString()
+    // ).toString();
 
-    console.log("walletString", encryptedWallet);
-    console.log("wallet", chamaCode);
+    // console.log("walletString", encryptedWallet);
+    // console.log("wallet", chamaCode);
 
     // generate random color for chama
     const h = Math.floor(Math.random() * 360);
+
+    function hslToHex(h, s, l) {
+      h /= 360;
+      s /= 100;
+      l /= 100;
+
+      let r, g, b;
+
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hueToRgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1 / 6) return p + (q - p) * 6 * t;
+          if (t < 1 / 2) return q;
+          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+          return p;
+        };
+
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+
+        r = Math.round(hueToRgb(p, q, h + 1 / 3) * 255);
+        g = Math.round(hueToRgb(p, q, h) * 255);
+        b = Math.round(hueToRgb(p, q, h - 1 / 3) * 255);
+      }
+
+      return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+    }
+
+    const hexColor = hslToHex(h, 90, 60);
 
     // create chama on firestore
     try {
@@ -151,10 +183,9 @@ export default function StartChamaScreen({ navigation, route }) {
         chamaWallet: wallet,
         chamaRules: [],
         chamaCreatedDate: new Date(),
-        chamaColor: `hsl(${h}deg, 90%, 85%)`,
+        chamaColor: hexColor, //`hsl(${h}deg, 90%, 85%)`,
       });
 
-      setLoading(false);
       setChamaCreated(true);
 
       // update has chama to true
@@ -169,145 +200,70 @@ export default function StartChamaScreen({ navigation, route }) {
     } catch (err) {
       console.log(err);
     }
-  };
 
-  const gotoChama = () => {
-    navigation.replace("Chama", {
-      chamaDetails: chamaDetails,
-      userId: userId,
-      userName: userName,
+    navigation.replace("Chama Basic Rules", {
+      chamaCode: chamaCode,
       chamaName: chamaDetails.chamaName,
-      chamaCode: chamaDetails.chamaCode,
+      chamaDescription: chamaDetails.chamaDescription,
+      chamaPassword: chamaPassword,
     });
-  };
-
-  const shareInvite = async () => {
-    try {
-      const result = await Share.share({
-        message: `I am inviting you to join  ${chamaDetails.chamaName} on ChamaSmart. Please use Chama code: ${chamaDetails.chamaCode}, and password: ${chamaDetails.chamaPassword} to join.`,
-      });
-    } catch (error) {
-      alert(error.message);
-    }
   };
 
   return (
     <View style={styles.container}>
-      {chamaCreated ? (
-        <View style={styles.chamaDetails}>
-          <MaterialCommunityIcons
-            name="party-popper"
-            size={64}
-            color="orange"
+      <View style={[styles.container, styles.createChamaForm]}>
+        <View>
+          <Text style={styles.notice}>
+            You are about to start a chama on Chama Smart. Please note that you
+            and other members of the chama will be required to operate the chama
+            in accordance to the terms and conditions of the app. If you agree
+            to these terms and conditions, please feel the form below to get
+            started your chama.
+          </Text>
+        </View>
+        <View style={styles.startChamaForm}>
+          {!!chamaDetails.error && (
+            <View style={styles.error}>
+              <Text style={styles.errorMessage}>{chamaDetails.error}</Text>
+            </View>
+          )}
+
+          <Text style={styles.title}>Name of the chama</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Chama Name"
+            onChangeText={(text) =>
+              setChamaDetails({ ...chamaDetails, chamaName: text })
+            }
+          />
+          <Text style={styles.title}>Chama Description</Text>
+          <TextInput
+            style={[styles.input, styles.description]}
+            placeholder="Type something"
+            multiline={true}
+            onChangeText={(text) =>
+              setChamaDetails({ ...chamaDetails, chamaDescription: text })
+            }
           />
 
-          <Text style={styles.title}>Congratulations</Text>
-
-          <View style={styles.details}>
-            <Text style={[styles.title, { marginBottom: 20 }]}>
-              A Chama has been created for you with the following details
+          <TouchableOpacity style={styles.startChamaBtn} onPress={startChama}>
+            {loading && <ActivityIndicator color="#fff" />}
+            <Text style={styles.btnText}>
+              {loading ? "Please wait..." : "Save and continue"}
             </Text>
-            <Text style={styles.title}>Chama Name:</Text>
-            <Text style={styles.detail}>{chamaDetails.chamaName}</Text>
-            <Text style={styles.title}>Description:</Text>
-            <Text style={styles.detail}>{chamaDetails.chamaDescription}</Text>
-            <Text style={styles.title}>Chama Code:</Text>
-            <Text style={styles.detail}>{chamaDetails.chamaCode}</Text>
-            <Text style={styles.title}> Password:</Text>
-            <Text style={styles.detail}>{chamaDetails.chamaPassword}</Text>
-            <Text style={styles.title}>Account number:</Text>
-            <Text style={styles.detail}>{chamaDetails.chamaWallet}</Text>
-
-            <Text>
-              Please note that members wishing joining this chama will need your
-              chama Code and password, note that these details important to your
-              chama and therefore should be kept secret to your members.
-            </Text>
-
-            <View style={styles.actionWrapper}>
-              <TouchableOpacity
-                style={[styles.btn, styles.btnInvite]}
-                activeOpacity={0.6}
-                onPress={shareInvite}
-              >
-                <MaterialCommunityIcons
-                  name="account-multiple-plus-outline"
-                  size={24}
-                  color="#000"
-                />
-                <Text style={styles.inviteTextBtn}>Invite members </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.btn]}
-                activeOpacity={0.6}
-                onPress={gotoChama}
-              >
-                <Text style={styles.actionsText}>Goto chama</Text>
-                <MaterialCommunityIcons
-                  name="arrow-right"
-                  size={24}
-                  color="#fff"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View style={[styles.container, styles.createChamaForm]}>
-          <View>
-            <Text style={styles.notice}>
-              You are about to start a chama on Chama Smart. Please note that
-              you and other members of the chama will be required to operate the
-              chama in accordance to the terms and conditions of the app. If you
-              agree to these terms and conditions, please feel the form below to
-              get started your chama.
+        <View style={styles.additional}>
+          <Text style={[styles.joinChamaText]}>
+            Your chama has already been created ?{" "}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Join Chama")}>
+            <Text style={[styles.joinChamaText, styles.joinChamaBtn]}>
+              Join the Chama
             </Text>
-          </View>
-          <View style={styles.startChamaForm}>
-            {!!chamaDetails.error && (
-              <View style={styles.error}>
-                <Text style={styles.errorMessage}>{chamaDetails.error}</Text>
-              </View>
-            )}
-
-            <Text style={styles.title}>Name of the chama</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Chama Name"
-              onChangeText={(text) =>
-                setChamaDetails({ ...chamaDetails, chamaName: text })
-              }
-            />
-            <Text style={styles.title}>Chama Description</Text>
-            <TextInput
-              style={[styles.input, styles.description]}
-              placeholder="Type something"
-              multiline={true}
-              onChangeText={(text) =>
-                setChamaDetails({ ...chamaDetails, chamaDescription: text })
-              }
-            />
-
-            <TouchableOpacity style={styles.startChamaBtn} onPress={startChama}>
-              {loading && <ActivityIndicator color="#fff" />}
-              <Text style={styles.btnText}>
-                {loading ? "Setting up chama..." : "Start Chama"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.additional}>
-            <Text style={[styles.joinChamaText]}>
-              Your chama has already been created ?{" "}
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Join Chama")}>
-              <Text style={[styles.joinChamaText, styles.joinChamaBtn]}>
-                Join the Chama
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      )}
+      </View>
     </View>
   );
 }
@@ -349,7 +305,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 20,
+    borderRadius: 5,
     marginBottom: 20,
     fontWeight: "bold",
     marginTop: 10,
@@ -370,7 +326,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 10,
     backgroundColor: "#ed4746",
-    borderRadius: 20,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,

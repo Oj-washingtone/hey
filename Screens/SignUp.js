@@ -152,6 +152,7 @@ export default function SignUpScreen({ navigation }) {
             hasChama: false,
             profilePicture: "",
             wallet: encryptedWallet,
+            scheduledTransactions: [],
           });
         } catch {
           setCredentials({
@@ -335,7 +336,6 @@ export default function SignUpScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {/* Login Btn */}
         <TouchableOpacity
           style={styles.loginBtn}
           activeOpacity={0.5}

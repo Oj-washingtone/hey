@@ -13,6 +13,7 @@ import {
 
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import { useState, useEffect } from "react";
 import {
@@ -20,6 +21,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   ImageBackground,
 } from "react-native";
 import Ioicons from "react-native-vector-icons/Ionicons";
@@ -30,6 +32,8 @@ import ChamaList from "./ChamaList";
 import TransactionList from "./TransactionHistory";
 
 export default function Wallet(props) {
+  const navigation = useNavigation();
+
   const userId = props?.userId;
   const fullName = props?.fullName;
   const [seeBalance, setSeeBalance] = useState({
@@ -79,6 +83,27 @@ export default function Wallet(props) {
     return unsubscribe;
   }, [userId]);
 
+  const goToTopUp = () => {
+    navigation.navigate("Deposit", {
+      userId: userId,
+      fullName: fullName,
+    });
+  };
+
+  const goToWithdraw = () => {
+    navigation.navigate("Withdraw", {
+      userId: userId,
+      fullName: fullName,
+    });
+  };
+
+  const goToSchedulePayment = () => {
+    navigation.navigate("Schedule Payment", {
+      userId: userId,
+      fullName: fullName,
+    });
+  };
+
   return (
     <View>
       <LinearGradient
@@ -115,17 +140,20 @@ export default function Wallet(props) {
       </LinearGradient>
 
       <View style={styles.walletActions}>
-        <TouchableOpacity style={styles.walletActionBtn}>
+        <TouchableOpacity style={styles.walletActionBtn} onPress={goToTopUp}>
           <MaterialCommunityIcons name="cash-plus" size={30} color="black" />
           <Text>Top up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.walletActionBtn}>
+        <TouchableOpacity style={styles.walletActionBtn} onPress={goToWithdraw}>
           <MaterialCommunityIcons name="cash-fast" size={30} color="black" />
           <Text>Withdraw</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.walletActionBtn}>
+        <TouchableOpacity
+          style={styles.walletActionBtn}
+          onPress={goToSchedulePayment}
+        >
           <MaterialCommunityIcons
             name="clock-outline"
             size={30}

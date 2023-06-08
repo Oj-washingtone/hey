@@ -116,7 +116,16 @@ export default function HomeScreen({ navigation }) {
           <Wallet fullName={userDetails.fullName} userId={userId} />
         </View>
       ) : (
-        <ActivityIndicator size="large" color="#E83672" />
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#E83672" />
+        </View>
       )}
     </View>
   );
