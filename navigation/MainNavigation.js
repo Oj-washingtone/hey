@@ -56,13 +56,13 @@ export default function MainNavigation() {
         options={{ headerShown: false }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Statistics"
         component={HomeScreen}
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
       <Tab.Screen name="Account" component={UserAccount} />
     </Tab.Navigator>
   );

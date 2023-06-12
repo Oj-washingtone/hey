@@ -184,6 +184,49 @@ export default function StartChamaScreen({ navigation, route }) {
         chamaRules: [],
         chamaCreatedDate: new Date(),
         chamaColor: hexColor, //`hsl(${h}deg, 90%, 85%)`,
+
+        accounting: [
+          {
+            memberId: userId,
+            contributions: [
+              {
+                amount: 0,
+                timestamp: new Date(),
+              },
+              // Other contribution entries for the member
+            ],
+            loans: [
+              // Other loan entries for the member
+            ],
+            fines: [
+              // Other fine entries for the member
+            ],
+            // Totals for member
+            contributionTotal: 0, // Calculate and update this value
+            loanTotal: 0, // Calculate and update this value
+            totalInterestEarned: 0, // Calculate and update this value
+            fineTotal: 0, // Calculate and update this value
+          },
+          // Other member entries in the Chama
+
+          // account totals
+        ],
+
+        transactionHistory: [
+          // {
+          //   type: "",
+          //   memberId: "",
+          //   amount: "",
+          //   timestamp: new Date(),
+          // },
+          // {
+          //   type: "",
+          //   memberId: "",
+          //   amount: "",
+          //   timestamp: new Date(),
+          // },
+          // Other transaction entries for the Chama
+        ],
       });
 
       setChamaCreated(true);

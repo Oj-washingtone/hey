@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 10,
     paddingHorizontal: 20,
+    backgroundColor: "#f2f3f5",
     // borderWidth: 1,
   },
 
@@ -225,6 +226,8 @@ const styles = StyleSheet.create({
     width: screenWidth - 70,
     paddingHorizontal: 20,
     maxHeight: 70,
+    borderRadius: 30,
+    backgroundColor: "#f2f3f5",
   },
 
   inputActions: {

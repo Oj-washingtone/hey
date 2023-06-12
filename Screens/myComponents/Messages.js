@@ -56,7 +56,7 @@ export default function Messages(props) {
         memberWaitList: arrayRemove(memberId),
       });
 
-      // add approved to the message that requested admission of this user
+      // Add approved to the message that requested admission of this user
       const messagesRef = doc(db, "chamas", chamaCode.toString());
       const messagesDoc = await getDoc(messagesRef);
       const messagesList = messagesDoc.data().messages;
@@ -68,6 +68,26 @@ export default function Messages(props) {
       });
       await updateDoc(messagesRef, {
         messages: newMessagesList,
+      });
+
+      // Add new accounting details for the member
+      const chamaDetails = messagesDoc.data();
+      const accounting = chamaDetails.accounting || [];
+      const newAccounting = [
+        ...accounting,
+        {
+          memberId: memberId,
+          contributions: [],
+          loans: [],
+          fines: [],
+          contributionTotal: 0,
+          loanTotal: 0,
+          totalInterestEarned: 0,
+          fineTotal: 0,
+        },
+      ];
+      await updateDoc(chamaRef, {
+        accounting: newAccounting,
       });
     } catch (e) {
       console.log(e);
@@ -98,6 +118,16 @@ export default function Messages(props) {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  // approve loan
+  const approveLoan = async (loanId) => {
+    alert("Function not yet implemented");
+  };
+
+  // decline loan
+  const declineLoan = async (loanId) => {
+    alert("Function not yet implemented");
   };
 
   // group messages by date
@@ -194,6 +224,31 @@ export default function Messages(props) {
                   <Text style={styles.declinedText}>Declined by admin</Text>
                 </View>
               )}
+
+              {/* Aprove and decline button for message of type loan request */}
+              {item.type === "loan request" &&
+                // if the for is not the current use
+                item.for !== props.userId &&
+                // show button for all users
+                !item.approved &&
+                !item.declined && (
+                  <View style={styles.mebershipBtns}>
+                    <TouchableOpacity
+                      style={[styles.button, styles.acceptBtn]}
+                      onPress={() => {
+                        approveLoan(item.loanId);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Approve</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.button, styles.declineBtn]}
+                      onPress={() => declineLoan(item.for)}
+                    >
+                      <Text style={styles.buttonText}>Decline</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
             </View>
           </View>
         </View>

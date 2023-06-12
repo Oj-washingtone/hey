@@ -272,3 +272,43 @@
           </View>
         </View>
       ) : (
+
+
+
+        Alert.alert(
+  `${chamaData.chamaName}'s Rules`,
+  `
+  Contribution:
+  - Amount: ${chamaData.chamaRule.contributionAmount}
+  - Frequency: ${chamaData.chamaRule.contributionFrequency}
+
+  Borrowing:
+  - Limit: ${chamaData.chamaRule.borrowingLimit}
+  - Interest Rate: ${chamaData.chamaRule.borrowingInterestRate}
+  - Duration: ${chamaData.chamaRule.borrowingDuration}
+  - Payback Method: ${chamaData.chamaRule.payBackMethod}
+  - Penalty: ${chamaData.chamaRule.borrowingPenalty}
+  - Loan Approval Model: ${chamaData.chamaRule.loanAprovalModel}
+
+  Profit Distribution:
+  - Financial Cycle Ends: ${chamaData.chamaRule.financialCycleEnds}
+  - Financial Cycle Ends Time: ${chamaData.chamaRule.financialCycleEndsTime}
+  - Plough Back Rate: ${chamaData.chamaRule.ploughBackRate}
+  - Rate Per Member: ${chamaData.chamaRule.ratePerMember}
+  `,
+  [
+    {
+      text: "Accept",
+      style: "cancel",
+      onPress: () => {
+        // Handle Accept action
+      },
+    },
+    {
+      text: "Decline",
+      onPress: () => {
+        // Handle Decline action
+      },
+    },
+  ]
+);

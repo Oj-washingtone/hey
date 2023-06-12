@@ -61,7 +61,7 @@ export default function EditProfile({ route, navigation }) {
         />
 
         <TouchableOpacity style={styles.saveBtn} activeOpacity={0.7}>
-          <Text style={styles.btnText}>Sve Changes</Text>
+          <Text style={styles.btnText}>Save Changes</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     width: "100%",
     height: 40,
-    backgroundColor: "#4fb448",
+    backgroundColor: "#ed4746",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 5,

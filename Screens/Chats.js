@@ -110,7 +110,7 @@ export default function HomeScreen({ navigation }) {
       {userDetails.fullName ? (
         <View style={styles.body}>
           <View style={styles.header}>
-            <Text style={styles.title}>brighter</Text>
+            <Text style={styles.title}>ChamaPal</Text>
             {/* Welcome message with name */}
             <Text style={styles.welcome}>
               Hello,{" "}

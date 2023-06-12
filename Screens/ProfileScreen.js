@@ -106,7 +106,7 @@ export default function UserAccount({ navigation }) {
               <Text>Logout</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.chamaCount}>0 chamas</Text>
+          {/* <Text style={styles.chamaCount}>0 chamas</Text> */}
 
           <View style={[styles.sectionsWrapper]}>
             <Text style={styles.title}>Account Information</Text>
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     borderWidth: 1,
-    borderColor: "#4fb448",
+    borderColor: "#ed4746",
   },
 
   chamaCount: {

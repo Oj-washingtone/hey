@@ -22,6 +22,7 @@ import ScheduleScreen from "../Screens/SchedulePayment";
 import AddScheduleForm from "../Screens/AddScheduleForm";
 import ChamaBasicRulesForm from "../Screens/ChamaBasicRules";
 import ChamaDetailsAnnouncement from "../Screens/ChamaDetailsAnnouncement";
+import ChamaAccount from "../Screens/ChamaAccounts";
 
 // Header right component
 import HeaderRight from "../Screens/myComponents/HeaderRight";
@@ -73,6 +74,14 @@ export default function UserStack() {
           options={{
             headerShown: false,
           }}
+        />
+
+        <Stack.Screen
+          name="Chama Accounts"
+          component={ChamaAccount}
+          // options={{
+          //   headerShown: false,
+          // }}
         />
       </Stack.Navigator>
     </NavigationContainer>

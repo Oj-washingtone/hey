@@ -167,7 +167,7 @@ export default function Wallet(props) {
           <Text>Pay</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.sections}>
+      {/* <View style={styles.sections}>
         <Text style={styles.title}>Next transaction</Text>
         <View style={styles.scheduleCard}>
           <View style={styles.dateWrapper}>
@@ -183,7 +183,7 @@ export default function Wallet(props) {
             </View>
           </View>
         </View>
-      </View>
+      </View> */}
       <View style={styles.sections}>
         <Text style={styles.title}>Transaction History</Text>
         <TransactionList userId={userId} />

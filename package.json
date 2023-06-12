@@ -27,6 +27,7 @@
     "react-native": "0.71.8",
     "react-native-btr": "^2.2.0",
     "react-native-calendars": "^1.1294.0",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-circular-picker": "^1.0.6",
     "react-native-crypto-js": "^1.0.0",
     "react-native-dropdown-menu": "^2.0.0",

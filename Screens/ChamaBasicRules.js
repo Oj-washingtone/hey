@@ -234,7 +234,10 @@ export default function ChamaBasicRulesForm(props) {
             >
               <Picker.Item label="Select approval model" value="" />
               <Picker.Item label="Automatic" value="automatic" />
-              <Picker.Item label="Approval by members" value="manual" />
+              <Picker.Item
+                label="Approval by members"
+                value="Approval by members"
+              />
             </Picker>
           </View>
 

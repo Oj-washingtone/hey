@@ -50,7 +50,7 @@ export default function TransactionList(props) {
 
   return (
     <View style={styles.txnList}>
-      <FlatList
+      {/* <FlatList
         data={transactionList}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -85,7 +85,7 @@ export default function TransactionList(props) {
             </View>
           </TouchableOpacity>
         )}
-      />
+      /> */}
     </View>
   );
 }

@@ -20,6 +20,8 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Alert,
+  Keyboard,
 } from "react-native";
 
 import { useAuthentication } from "../utils/hooks/useAuthentication";
@@ -41,6 +43,9 @@ export default function JoinChamaScreen({ navigation, route }) {
   });
 
   const joinChama = async () => {
+    // hide keyboard
+    Keyboard.dismiss();
+
     // check for empty fields
     if (chamaDetails.chamaCode === "" || chamaDetails.chamaPassword === "") {
       setChamaDetails({
@@ -100,40 +105,90 @@ export default function JoinChamaScreen({ navigation, route }) {
       return;
     }
 
-    // if all is well, add user to chama wait list
-    await updateDoc(chamaRef, {
-      memberWaitList: arrayUnion(userId),
-    });
-    setLoading(false);
+    Alert.alert(
+      `${chamaData.chamaName}'s Rules`,
+      `
+      You are about to join ${chamaData.chamaName}. Please read and accept the chama rules before proceeding.
 
-    // set set success message and if any error message remove them
-    setChamaDetails({
-      ...chamaDetails,
-      success:
-        "You have been added to the wait list for this chama, you will be notified as soon as the chama approves your membership request",
-      error: "",
-    });
+      Contribution:
+      - Amount: ${chamaData.chamaRules.contributionAmount}
+      - Frequency: ${chamaData.chamaRules.contributionFrequency}
+    
+      Borrowing:
+      - Limit: ${chamaData.chamaRules.borrowingLimit}
+      - Interest Rate: ${chamaData.chamaRules.borrowingInterestRate}%
+      - Duration: ${chamaData.chamaRules.borrowingDuration} Months
+      - Payback Method: in ${chamaData.chamaRules.payBackMethod}
+      - Defaullting penalty: ${chamaData.chamaRules.borrowingPenalty}%
+      - Loan Approval Model: ${chamaData.chamaRules.loanAprovalModel}
+    
+      Profit Distribution:
+      - Financial Cycle Ends: ${chamaData.chamaRules.financialCycleEnds}
+      - Financial Cycle Ends Time: ${chamaData.chamaRules.financialCycleEndsTime}
+      - Plough Back Rate: ${chamaData.chamaRules.ploughBackRate}%
+      - Rate Per Member: ${chamaData.chamaRules.ratePerMember}%
+      `,
+      [
+        {
+          text: "Accept",
+          style: "cancel",
+          onPress: async () => {
+            // Handle Accept action
+            // if all is well, add user to chama wait list
+            await updateDoc(chamaRef, {
+              memberWaitList: arrayUnion(userId),
+            });
+            setLoading(false);
 
-    // send message to this chama about the user wishing to join the chama
-    const messageRef = doc(db, "chamas", chamaDetails.chamaCode.toString());
-    try {
-      await updateDoc(messageRef, {
-        messages: arrayUnion({
-          message: `${route.params.userName} is requesting to join this chama`,
-          for: userId,
-          type: "membership",
-          senderID: "Chama Smart",
-          senderName: "Chama Smart",
-          timestamp: new Date(),
-          id: Math.random().toString(36).substring(7),
-        }),
-      });
+            // set set success message and if any error message remove them
+            setChamaDetails({
+              ...chamaDetails,
+              success:
+                "You have been added to the wait list for this chama, you will be notified as soon as the chama approves your membership request",
+              error: "",
+            });
 
-      setMessage("");
-      setShowOptions(true);
-    } catch (e) {
-      console.log(e);
-    }
+            // send message to this chama about the user wishing to join the chama
+            const messageRef = doc(
+              db,
+              "chamas",
+              chamaDetails.chamaCode.toString()
+            );
+            try {
+              await updateDoc(messageRef, {
+                messages: arrayUnion({
+                  message: `${route.params.userName} is requesting to join this chama`,
+                  for: userId,
+                  type: "membership",
+                  senderID: "Chama Smart",
+                  senderName: "Chama Smart",
+                  timestamp: new Date(),
+                  id: Math.random().toString(36).substring(7),
+                }),
+              });
+
+              // setMessage("");
+              setShowOptions(true);
+            } catch (e) {
+              console.log(e);
+            }
+          },
+        },
+        {
+          text: "Decline",
+          onPress: () => {
+            // Handle Decline action
+            setLoading(false);
+            setChamaDetails({
+              ...chamaDetails,
+              success: "",
+              error:
+                "Request could not be processed, you need to accept the rules of the chama to be part of this chama ",
+            });
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -167,8 +222,8 @@ export default function JoinChamaScreen({ navigation, route }) {
         }
       />
       <Text style={styles.terms}>
-        By joining this chama, I agree to their {" terms and conditions"} as
-        well as the terms and condition of the app
+        By joining this chama, you'll be required to I agree to their{" "}
+        {" terms and conditions"} as well as the terms and condition of the app
       </Text>
 
       <TouchableOpacity style={styles.joinChamaBtn} onPress={joinChama}>

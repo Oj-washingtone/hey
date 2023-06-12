@@ -3,9 +3,11 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+// use navigation
+import { useNavigation } from "@react-navigation/native";
 
-
-export default function WelcomeScreen({ navigation }) {
+export default function WelcomeScreen() {
+  const navigation = useNavigation();
   const gotoLoginScreen = () => {
     navigation.navigate("Login");
   };
@@ -29,11 +31,11 @@ export default function WelcomeScreen({ navigation }) {
       <View style={styles.logoWrapper}>
         {/* Icon */}
         <MaterialCommunityIcons
-          name="lightning-bolt-circle"
+          name="all-inclusive"
           size={40}
-          color="black"
+          color="#ed4746"
         />
-        <Text style={styles.logo}>brighter</Text>
+        <Text style={styles.logo}>ChamaPal</Text>
       </View>
 
       <Image
@@ -78,6 +80,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
+    flexDirection: "row",
   },
 
   logo: {
@@ -85,6 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "sans-serif",
     verticalAlign: "middle",
+    marginLeft: 10,
   },
 
   onboardingImage: {

@@ -22,6 +22,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
+      package: "com.chamapal.chamapal",
     },
     web: {
       favicon: "./assets/favicon.png",
@@ -35,6 +36,9 @@ export default {
       firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       firebaseAppId: process.env.FIREBASE_APP_ID,
       firebaseMeasurementId: process.env.FIREBASE_MEASUREMENT_ID,
+      eas: {
+        projectId: "5905bcc6-3e9a-4f2d-ad86-e94952705fbe",
+      },
     },
   },
 };
